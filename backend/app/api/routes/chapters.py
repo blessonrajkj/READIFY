@@ -16,7 +16,7 @@ def get_book_chapters(book_id: str, db: Session = Depends(get_db)):
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
         
-    chapters = db.query(Chapter).filter(Chapter.book_id == book_id).order_index_ascii().order_by(Chapter.order_index.asc()).all()
+    chapters = db.query(Chapter).filter(Chapter.book_id == book_id).order_by(Chapter.order_index.asc()).all()
     return chapters
 
 @router.patch("/{chapter_id}", response_model=ChapterResponse)

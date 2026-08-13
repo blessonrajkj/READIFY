@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: readify-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: securepassword123
+      POSTGRES_DB: readify
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: readify-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: readify-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:securepassword123@postgres:5432/readify
+      - DATABASE_URL_MASTER=postgresql://postgres:securepassword123@postgres:5432/postgres
+      - REDIS_URL=redis://redis:6379/0
+      - TTS_PROVIDER=edge
+      - STORAGE_PROVIDER=local
+    volumes:
+      - ./backend:/app
+      - backend-data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: readify-worker
+    command: python -m app.workers.audio_worker
+    environment:
+      - DATABASE_URL=postgresql://postgres:securepassword123@postgres:5432/readify
+      - DATABASE_URL_MASTER=postgresql://postgres:securepassword123@postgres:5432/postgres
+      - REDIS_URL=redis://redis:6379/0
+      - TTS_PROVIDER=edge
+      - STORAGE_PROVIDER=local
+    volumes:
+      - ./backend:/app
+      - backend-data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: readify-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
+
+volumes:
+  postgres-data:
+  backend-data:

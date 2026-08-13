@@ -19,6 +19,7 @@ class ChapterDetector:
         
         for page_idx, page_text in enumerate(pages_text):
             lines = page_text.split("\n")
+            page_candidates = []
             for line in lines:
                 line_strip = line.strip()
                 # A valid chapter heading line is short (under 80 chars) and matches chapter patterns
@@ -30,16 +31,22 @@ class ChapterDetector:
                             break
                             
                     if matched:
-                        # Clean up chapter titles
                         title = line_strip
-                        # Avoid adding duplicates from headers repeating on multiple pages
+                        # Avoid adding duplicates
                         if not any(c["title"].lower() == title.lower() for c in candidates):
-                            candidates.append({
+                            page_candidates.append({
                                 "title": title,
                                 "start_page": page_idx,
                                 "end_page": page_idx, # Will adjust below
-                                "order_index": len(candidates)
+                                "order_index": 0
                             })
+            
+            # If a single page matches more than 2 chapters, it's a Table of Contents / Index page.
+            # Discard to let chapters be detected on their actual content pages later.
+            if len(page_candidates) <= 2:
+                for pc in page_candidates:
+                    pc["order_index"] = len(candidates)
+                    candidates.append(pc)
                             
         # Post-process: adjust end pages
         if candidates:

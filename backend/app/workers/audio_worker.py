@@ -123,7 +123,7 @@ async def process_pdf_job(db: Session, job: Job):
         # Split into chunks
         chunks = ChunkService.chunk_text(chapter_clean_text)
         
-        # Save text chunks in database
+        # Save text chunks in database and create corresponding pending AudioChunk records
         for tc_idx, chunk_data in enumerate(chunks):
             db_chunk = TextChunk(
                 book_id=book_id,
@@ -137,24 +137,17 @@ async def process_pdf_job(db: Session, job: Job):
             db.add(db_chunk)
             db.flush() # Flush to get chunk ID
             
-            tts_chunks_to_process.append((db_chapter.id, db_chunk.id, chunk_data["content"]))
+            # Create a pending AudioChunk record
+            db_audio_chunk = AudioChunk(
+                text_chunk_id=db_chunk.id,
+                chapter_id=db_chapter.id,
+                filepath="",
+                duration=0.0,
+                status="pending"
+            )
+            db.add(db_audio_chunk)
             
     db.commit()
-    
-    # 3. Text-to-Speech (TTS) Synthesis
-    # We synthesize chunk-by-chunk and save audio records
-    logger.info(f"Step 3: Synthesizing speech for {len(tts_chunks_to_process)} chunks...")
-    tts_provider = get_tts_provider()
-    storage = get_storage_provider()
-    
-    # Deduce language and voice
-    # Simple check for Hindi/Tamil characters
-    lang = book.language or "en"
-    # Choose default voice based on language
-    available_voices = tts_provider.get_available_voices(lang)
-    default_voice = available_voices[0]["id"] if available_voices else None
-    
-    total_chunks = len(tts_chunks_to_process)
     
     # Generate summary for each chapter asynchronously using Gemini (if key is set)
     if settings.GEMINI_API_KEY:
@@ -175,73 +168,12 @@ async def process_pdf_job(db: Session, job: Job):
                 logger.error(f"Failed to generate summary for chapter {ch.title}: {e}")
         db.commit()
         
-    # Process TTS
-    for idx, (chapter_id, chunk_id, content) in enumerate(tts_chunks_to_process):
-        # Calculate progress from 55% to 95%
-        tts_progress = 55 + int((idx / total_chunks) * 40) if total_chunks > 0 else 95
-        job.progress = tts_progress
-        db.commit()
-        
-        # Audio filename
-        filename = f"{book_id}_ch_{chapter_id}_chunk_{chunk_id}.mp3"
-        temp_audio_path = os.path.join(settings.AUDIO_DIR, filename)
-        
-        try:
-            # Perform synthesis
-            duration = await tts_provider.synthesize(content, temp_audio_path, default_voice)
-            
-            # Save chunk to storage provider
-            with open(temp_audio_path, "rb") as af:
-                audio_data = af.read()
-            stored_path = storage.save_file(audio_data, "audio", filename)
-            
-            # Remove temp local audio file if storage is not local
-            if settings.STORAGE_PROVIDER != "local":
-                try:
-                    os.remove(temp_audio_path)
-                except Exception:
-                    pass
-                    
-            # Save AudioChunk in DB
-            db_audio_chunk = AudioChunk(
-                text_chunk_id=chunk_id,
-                chapter_id=chapter_id,
-                filepath=stored_path,
-                duration=duration,
-                status="synthesized"
-            )
-            db.add(db_audio_chunk)
-            db.commit()
-            
-        except Exception as e:
-            logger.error(f"TTS synthesis failed for chunk {chunk_id}: {e}")
-            # Save failed audio chunk
-            db_audio_chunk = AudioChunk(
-                text_chunk_id=chunk_id,
-                chapter_id=chapter_id,
-                filepath="",
-                duration=0.0,
-                status="failed",
-                try_count=1
-            )
-            db.add(db_audio_chunk)
-            db.commit()
-            
-    # Calculate chapter durations
-    logger.info("Finalizing chapter durations...")
-    chapters_db = db.query(Chapter).filter(Chapter.book_id == book_id).all()
-    for ch in chapters_db:
-        # Sum of audio durations
-        total_duration = db.query(text("SUM(duration)")).select_from(AudioChunk).filter(AudioChunk.chapter_id == ch.id).scalar() or 0.0
-        ch.duration = float(total_duration)
-        db.add(ch)
-        
     # Mark job and book as completed!
     job.progress = 100
     job.status = "completed"
     book.status = "completed"
     db.commit()
-    logger.info(f"Job {job.id} for book '{book.title}' completed successfully!")
+    logger.info(f"Job {job.id} for book '{book.title}' structured successfully!")
 
 async def worker_loop():
     """Main worker event loop to poll and execute jobs."""
@@ -293,8 +225,68 @@ async def worker_loop():
                             
                         db.commit()
             else:
-                # No jobs found, sleep for a short duration
-                await asyncio.sleep(1.5)
+                # No PDF processing jobs found, let's poll for a pending AudioChunk to synthesize in the background!
+                # Select a pending AudioChunk
+                ac = db.query(AudioChunk).filter(AudioChunk.status == "pending").first()
+                if ac:
+                    # Let's synthesize this specific audio chunk in the background!
+                    # Get its text chunk
+                    text_chunk = db.query(TextChunk).filter(TextChunk.id == ac.text_chunk_id).first()
+                    if text_chunk:
+                        # Mark it as processing so other workers don't pick it up
+                        ac.status = "processing"
+                        db.commit()
+                        
+                        try:
+                            # Perform synthesis
+                            tts_provider = get_tts_provider()
+                            storage = get_storage_provider()
+                            
+                            # Get book and voice
+                            book = db.query(Book).filter(Book.id == text_chunk.book_id).first()
+                            lang = book.language if book else "en"
+                            voices = tts_provider.get_available_voices(lang)
+                            voice = voices[0]["id"] if voices else "en-US-AriaNeural"
+                            
+                            filename = f"{text_chunk.book_id}_ch_{ac.chapter_id}_chunk_{ac.text_chunk_id}.mp3"
+                            temp_audio_path = os.path.join(settings.AUDIO_DIR, filename)
+                            
+                            duration = await tts_provider.synthesize(text_chunk.content, temp_audio_path, voice)
+                            
+                            with open(temp_audio_path, "rb") as af:
+                                audio_data = af.read()
+                            stored_path = storage.save_file(audio_data, "audio", filename)
+                            
+                            if settings.STORAGE_PROVIDER != "local":
+                                try:
+                                    os.remove(temp_audio_path)
+                                except Exception:
+                                    pass
+                                    
+                            ac.filepath = stored_path
+                            ac.duration = duration
+                            ac.status = "synthesized"
+                            db.commit()
+                            
+                            # Also update the chapter duration in the DB
+                            ch = db.query(Chapter).filter(Chapter.id == ac.chapter_id).first()
+                            if ch:
+                                total_duration = db.query(text("SUM(duration)")).select_from(AudioChunk).filter(AudioChunk.chapter_id == ch.id).scalar() or 0.0
+                                ch.duration = float(total_duration)
+                                db.commit()
+                                
+                            logger.info(f"Background synthesized audio chunk {ac.id} for book {text_chunk.book_id}")
+                        except Exception as e:
+                            logger.error(f"Background synthesis failed for chunk {ac.id}: {e}")
+                            ac.status = "pending" # Reset so it retries later
+                            db.commit()
+                    else:
+                        # Bad database entry
+                        db.delete(ac)
+                        db.commit()
+                else:
+                    # No PDF jobs and no pending audio chunks, sleep for a short duration
+                    await asyncio.sleep(1.5)
         except Exception as e:
             logger.error(f"Worker database loop exception: {e}")
             await asyncio.sleep(5)
@@ -302,4 +294,22 @@ async def worker_loop():
             db.close()
 
 if __name__ == "__main__":
+    # Force logging to console and set root level to INFO
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    
+    # Clear any bad handlers and add a clean stdout stream handler
+    for h in root_logger.handlers[:]:
+        root_logger.removeHandler(h)
+    
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s"))
+    root_logger.addHandler(console_handler)
+    
+    # Direct print to bypass buffering/logging silencing
+    print("\n==================================================", flush=True)
+    print("Readify AI Background Worker successfully initialized!", flush=True)
+    print("Waiting for PDF-to-Audiobook jobs...", flush=True)
+    print("==================================================\n", flush=True)
+    
     asyncio.run(worker_loop())

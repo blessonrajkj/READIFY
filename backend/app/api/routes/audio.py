@@ -9,6 +9,9 @@ from app.database.database import get_db
 from app.models.database_models import Book, Chapter, AudioChunk, TextChunk
 from app.services.storage_service import get_storage_provider
 
+from app.services.tts_service import get_tts_provider
+from app.config import settings
+
 router = APIRouter(prefix="/books/{book_id}/audio", tags=["Audio"])
 logger = logging.getLogger(__name__)
 
@@ -33,7 +36,7 @@ def get_chapter_audio_chunks(book_id: str, chapter_id: str, db: Session = Depend
             "text": tc.content,
             "chunk_index": tc.chunk_index,
             "page_number": tc.page_number,
-            "audio_url": f"/api/books/{book_id}/audio/chunks/{ac.id}" if ac and ac.status == "synthesized" else None,
+            "audio_url": f"/api/books/{book_id}/audio/chunks/{ac.id}" if ac else None,
             "status": ac.status if ac else "pending",
             "duration": ac.duration if ac else 0.0
         })
@@ -41,13 +44,58 @@ def get_chapter_audio_chunks(book_id: str, chapter_id: str, db: Session = Depend
     return results
 
 @router.get("/chunks/{audio_chunk_id}")
-def stream_audio_chunk(book_id: str, audio_chunk_id: str, db: Session = Depends(get_db)):
-    """Streams a specific audio chunk MP3 file."""
+async def stream_audio_chunk(book_id: str, audio_chunk_id: str, db: Session = Depends(get_db)):
+    """Streams a specific audio chunk MP3 file, generating it on-the-fly if pending."""
     ac = db.query(AudioChunk).filter(AudioChunk.id == audio_chunk_id).first()
     if not ac:
         raise HTTPException(status_code=404, detail="Audio chunk not found")
         
     storage = get_storage_provider()
+    
+    # On-the-fly synthesis if not yet generated
+    if ac.status != "synthesized":
+        try:
+            logger.info(f"Synthesizing chunk {ac.text_chunk_id} on-the-fly...")
+            text_chunk = db.query(TextChunk).filter(TextChunk.id == ac.text_chunk_id).first()
+            if not text_chunk:
+                raise HTTPException(status_code=404, detail="Text content not found")
+                
+            # Get provider and voice
+            tts_provider = get_tts_provider()
+            book = db.query(Book).filter(Book.id == book_id).first()
+            lang = book.language if book else "en"
+            voices = tts_provider.get_available_voices(lang)
+            voice = voices[0]["id"] if voices else "en-US-AriaNeural"
+            
+            filename = f"{book_id}_ch_{ac.chapter_id}_chunk_{ac.text_chunk_id}.mp3"
+            temp_audio_path = os.path.join(settings.AUDIO_DIR, filename)
+            
+            # Synthesize
+            duration = await tts_provider.synthesize(text_chunk.content, temp_audio_path, voice)
+            
+            # Save file to storage
+            with open(temp_audio_path, "rb") as af:
+                audio_data = af.read()
+            stored_path = storage.save_file(audio_data, "audio", filename)
+            
+            # Clean local temp file if S3
+            if settings.STORAGE_PROVIDER != "local":
+                try:
+                    os.remove(temp_audio_path)
+                except Exception:
+                    pass
+            
+            # Update DB
+            ac.filepath = stored_path
+            ac.duration = duration
+            ac.status = "synthesized"
+            db.commit()
+            db.refresh(ac)
+            
+        except Exception as e:
+            logger.error(f"On-the-fly synthesis failed: {e}")
+            raise HTTPException(status_code=500, detail=f"Speech synthesis failed: {e}")
+            
     filepath = storage.get_file_path_or_url(ac.filepath)
     
     # If storage is local file system, return a FileResponse

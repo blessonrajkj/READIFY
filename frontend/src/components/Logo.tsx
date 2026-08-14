@@ -20,26 +20,23 @@ export default function Logo({ className = "flex items-center gap-2.5 group", ic
           strokeLinejoin="round"
           className={`${iconClassName} text-foreground`}
         >
-          {/* Headphone Headband */}
-          <path d="M 3.5 13 A 8.5 8.5 0 0 1 20.5 13" />
+          {/* Circular frame (CD / Vinyl record) open at the bottom */}
+          <path d="M 4.5 15 A 8 8 0 1 1 19.5 15" />
           
-          {/* Left Page (with subtle transparency fill) */}
+          {/* Open book pages bridging the bottom */}
           <path 
-            d="M 12 13 C 10 11.5, 7.5 11.5, 5 13 L 5 19 C 7.5 17.5, 10 17.5, 12 19 Z" 
+            d="M 4.5 15 C 7.5 17.2, 9.5 17.2, 12 15 C 14.5 17.2, 16.5 17.2, 19.5 15" 
             fill="currentColor" 
             fillOpacity="0.1" 
           />
           
-          {/* Right Page (with subtle transparency fill) */}
-          <path 
-            d="M 12 13 C 14 11.5, 16.5 11.5, 19 13 L 19 19 C 16.5 17.5, 14 17.5, 12 19 Z" 
-            fill="currentColor" 
-            fillOpacity="0.1" 
-          />
+          {/* Spine / Ribbon Bookmark extending down */}
+          <line x1="12" y1="15" x2="12" y2="21" strokeWidth="2.5" />
           
-          {/* Minimalist Earcups */}
-          <rect x="2" y="12" width="1.5" height="4" rx="0.75" fill="currentColor" stroke="none" />
-          <rect x="20.5" y="12" width="1.5" height="4" rx="0.75" fill="currentColor" stroke="none" />
+          {/* Inner Audio Waves */}
+          <line x1="9" y1="8" x2="9" y2="12" strokeWidth="2" />
+          <line x1="12" y1="6" x2="12" y2="12" strokeWidth="2" />
+          <line x1="15" y1="8" x2="15" y2="12" strokeWidth="2" />
         </svg>
       </div>
       

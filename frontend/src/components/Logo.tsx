@@ -6,7 +6,7 @@ interface LogoProps {
   showText?: boolean;
 }
 
-export default function Logo({ className = "flex items-center gap-2 group", iconClassName = "w-10 h-6", showText = true }: LogoProps) {
+export default function Logo({ className = "flex items-center gap-2 group", iconClassName = "w-10 h-6", showText = false }: LogoProps) {
   return (
     <div className={className}>
       {/* Icon Wrapper - Transparent without background or outline */}

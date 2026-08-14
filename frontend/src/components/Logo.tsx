@@ -15,28 +15,18 @@ export default function Logo({ className = "flex items-center gap-2.5 group", ic
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="3"
           strokeLinecap="round"
-          strokeLinejoin="round"
           className={`${iconClassName} text-foreground`}
         >
-          {/* Circular frame (CD / Vinyl record) open at the bottom */}
-          <path d="M 4.5 15 A 8 8 0 1 1 19.5 15" />
-          
-          {/* Open book pages bridging the bottom */}
-          <path 
-            d="M 4.5 15 C 7.5 17.2, 9.5 17.2, 12 15 C 14.5 17.2, 16.5 17.2, 19.5 15" 
-            fill="currentColor" 
-            fillOpacity="0.1" 
-          />
-          
-          {/* Spine / Ribbon Bookmark extending down */}
-          <line x1="12" y1="15" x2="12" y2="21" strokeWidth="2.5" />
-          
-          {/* Inner Audio Waves */}
-          <line x1="9" y1="8" x2="9" y2="12" strokeWidth="2" />
-          <line x1="12" y1="6" x2="12" y2="12" strokeWidth="2" />
-          <line x1="15" y1="8" x2="15" y2="12" strokeWidth="2" />
+          {/* Dynamic 7-Bar Audio Waveform */}
+          <line x1="3" y1="10" x2="3" y2="14" />
+          <line x1="6" y1="7" x2="6" y2="17" />
+          <line x1="9" y1="4" x2="9" y2="20" />
+          <line x1="12" y1="9" x2="12" y2="15" />
+          <line x1="15" y1="3" x2="15" y2="21" />
+          <line x1="18" y1="7" x2="18" y2="17" />
+          <line x1="21" y1="10" x2="21" y2="14" />
         </svg>
       </div>
       

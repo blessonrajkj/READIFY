@@ -24,15 +24,6 @@ export default function LandingPage() {
 
       {/* Main Hero Section */}
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-28 md:py-44 max-w-5xl mx-auto w-full text-center z-10">
-        
-        {/* Eyebrow Tag with mount animation */}
-        <div 
-          className={`mb-8 rounded-full px-4 py-1.5 bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10 text-[10px] uppercase tracking-[0.2em] font-bold text-muted-foreground/80 w-max mx-auto transition-premium duration-1000 transform ${
-            isMounted ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-          }`}
-        >
-          Intelligent PDF to Audiobook Reader
-        </div>
 
         {/* Hero Headlines with staggered mount animation */}
         <h1 

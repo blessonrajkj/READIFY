@@ -36,7 +36,7 @@ export default function Logo({ className = "flex items-center gap-2.5 group", ic
       
       {showText && (
         <span className="font-extrabold tracking-tight text-sm font-sans text-foreground">
-          Readify<span className="text-muted-foreground/60 font-light ml-0.5">AI</span>
+          Readify
         </span>
       )}
     </div>

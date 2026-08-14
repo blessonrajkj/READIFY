@@ -20,16 +20,16 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 p-4">
       {/* Double Bezel Outer Enclosure */}
-      <div className="mx-auto max-w-5xl rounded-full bg-black/5 dark:bg-white/5 p-1 ring-1 ring-black/5 dark:ring-white/10 backdrop-blur-md">
+      <div className="mx-auto max-w-6xl rounded-full bg-black/5 dark:bg-white/5 p-1.5 ring-1 ring-black/5 dark:ring-white/10 backdrop-blur-md">
         {/* Inner Core */}
-        <div className="flex items-center justify-between px-6 py-2 rounded-full bg-white/70 dark:bg-black/70 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
+        <div className="flex items-center justify-between px-8 py-3.5 rounded-full bg-white/70 dark:bg-black/70 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
           {/* Logo */}
           <Link href="/">
             <Logo />
           </Link>
-
+ 
           {/* Nav links */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -37,21 +37,21 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-premium ${
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-premium ${
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : "hover:bg-muted text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
+                  <Icon className="w-4 h-4" />
                   {item.label}
                 </Link>
               );
             })}
           </nav>
-
+ 
           {/* Settings & Theme Selector */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {/* Quick Link for Mobile */}
             <div className="flex md:hidden items-center gap-1">
               {navItems.map((item) => {
@@ -61,29 +61,29 @@ export default function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`p-2 rounded-full transition-premium ${
+                    className={`p-2.5 rounded-full transition-premium ${
                       isActive
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted text-muted-foreground"
                     }`}
                     title={item.label}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-5 h-5" />
                   </Link>
                 );
               })}
             </div>
-
+ 
             {/* Theme Toggle Button */}
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-foreground transition-premium active:scale-95"
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-foreground transition-premium active:scale-95"
                 title="Theme Settings"
               >
-                {theme === "light" && <Sun className="w-4 h-4" />}
-                {theme === "dark" && <Moon className="w-4 h-4" />}
-                {theme === "system" && <Laptop className="w-4 h-4" />}
+                {theme === "light" && <Sun className="w-5 h-5" />}
+                {theme === "dark" && <Moon className="w-5 h-5" />}
+                {theme === "system" && <Laptop className="w-5 h-5" />}
               </button>
 
               {dropdownOpen && (

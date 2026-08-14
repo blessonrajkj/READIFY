@@ -9,8 +9,8 @@ interface LogoProps {
 export default function Logo({ className = "flex items-center gap-2 group", iconClassName = "w-10 h-6", showText = true }: LogoProps) {
   return (
     <div className={className}>
-      {/* Icon Wrapper - Horizontal Pill without outline */}
-      <div className="w-14 h-9 rounded-xl bg-black/5 dark:bg-white/5 p-1 flex items-center justify-center transition-premium group-hover:scale-105 active:scale-95">
+      {/* Icon Wrapper - Transparent without background or outline */}
+      <div className="w-14 h-9 p-1 flex items-center justify-center transition-premium group-hover:scale-105 active:scale-95">
         <svg
           viewBox="0 0 38 24"
           fill="none"

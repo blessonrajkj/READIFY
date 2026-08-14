@@ -314,7 +314,7 @@ export default function AudioPlayer({
   const timeRemaining = Math.max(0, chapterDuration - chapterTime);
 
   return (
-    <div className="w-full bg-card border-t border-border p-4 md:p-6 shadow-2xl transition-premium">
+    <div className="w-full rounded-[calc(2.5rem-0.375rem)] bg-card/90 dark:bg-card/95 p-4 md:p-5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] transition-premium">
       <div className="mx-auto max-w-5xl flex flex-col gap-4">
         {/* Top Info & Sliders */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">

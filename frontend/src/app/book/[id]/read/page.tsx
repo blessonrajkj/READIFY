@@ -458,7 +458,7 @@ export default function ReadPage({ params }: PageProps) {
 
       {/* FLOATING/STICKY PLAYER FOOTER */}
       {activeChapter && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border shadow-2xl">
+        <div className="fixed bottom-6 left-6 right-6 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-[700px] z-40 p-1.5 rounded-[2.5rem] bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10 shadow-2xl backdrop-blur-md transition-premium">
           <AudioPlayer
             bookId={bookId}
             chapterId={activeChapter.id}

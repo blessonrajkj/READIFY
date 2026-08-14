@@ -247,7 +247,7 @@ export default function LibraryPage() {
 
               return (
                 // Double Bezel card structure
-                <div key={book.id} className="group p-1.5 rounded-[2rem] bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10 transition-premium hover:shadow-lg">
+                <div key={book.id} className="group p-1.5 rounded-[2rem] bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10 transition-premium hover:scale-[1.01] hover:shadow-2xl hover:ring-black/10 dark:hover:ring-white/20">
                   <div className="relative p-4 rounded-[calc(2rem-0.375rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex flex-col justify-between h-full min-h-[350px]">
                     
                     {/* Menu Button / Dropdown */}
@@ -298,8 +298,8 @@ export default function LibraryPage() {
                     </div>
 
                     {/* Book Cover Container */}
-                    <div className="flex justify-center mb-4">
-                      <div className="w-32 h-44 shadow-lg rounded-2xl overflow-hidden">
+                    <div className="flex justify-center mb-4 overflow-hidden rounded-2xl">
+                      <div className="w-32 h-44 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.22)] rounded-2xl overflow-hidden transform group-hover:scale-[1.04] group-hover:-translate-y-1.5 transition-premium duration-500">
                         <CoverImage title={book.title} author={book.author || "Unknown"} coverPath={book.cover_path || undefined} />
                       </div>
                     </div>

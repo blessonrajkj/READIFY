@@ -85,10 +85,10 @@ export default function SyncedReader({
 
               {/* Paragraph Text */}
               <p
-                className={`text-sm md:text-base leading-relaxed tracking-normal font-sans transition-premium ${
+                className={`text-base md:text-lg leading-loose tracking-wide font-serif transition-premium ${
                   isActive 
-                    ? "text-foreground font-medium" 
-                    : "text-muted-foreground/80 group-hover:text-foreground/90"
+                    ? "text-foreground font-semibold dark:text-white" 
+                    : "text-muted-foreground/70 dark:text-muted-foreground/50 group-hover:text-foreground/90"
                 } ${!isActive && "md:pl-4" /* Indent hover item slightly to fit play button space */}`}
               >
                 {chunk.text}

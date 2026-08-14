@@ -6,11 +6,11 @@ interface LogoProps {
   showText?: boolean;
 }
 
-export default function Logo({ className = "flex items-center gap-3 group", iconClassName = "w-5 h-5", showText = true }: LogoProps) {
+export default function Logo({ className = "flex items-center gap-2 group", iconClassName = "w-4.5 h-4.5", showText = true }: LogoProps) {
   return (
     <div className={className}>
       {/* Double Bezel Icon Wrapper */}
-      <div className="w-10 h-10 rounded-2xl bg-black/5 dark:bg-white/5 p-1 ring-1 ring-black/5 dark:ring-white/10 flex items-center justify-center transition-premium group-hover:scale-105 active:scale-95 shadow-sm">
+      <div className="w-9 h-9 rounded-xl bg-black/5 dark:bg-white/5 p-1 ring-1 ring-black/5 dark:ring-white/10 flex items-center justify-center transition-premium group-hover:scale-105 active:scale-95 shadow-sm">
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -31,7 +31,7 @@ export default function Logo({ className = "flex items-center gap-3 group", icon
       </div>
       
       {showText && (
-        <span className="font-extrabold tracking-tight text-base font-sans text-foreground">
+        <span className="font-extrabold tracking-tight text-sm font-sans text-foreground">
           Readify
         </span>
       )}

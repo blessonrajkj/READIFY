@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Sun, Moon, Laptop, BookOpen, Upload, Library, Volume2 } from "lucide-react";
 import { useTheme } from "./ThemeContext";
+import Logo from "./Logo";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -23,13 +24,8 @@ export default function Navbar() {
         {/* Inner Core */}
         <div className="flex items-center justify-between px-6 py-2 rounded-full bg-white/70 dark:bg-black/70 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center transition-premium active:scale-95">
-              <Volume2 className="w-4 h-4" />
-            </div>
-            <span className="font-semibold tracking-tight text-sm font-sans">
-              Readify <span className="text-muted-foreground font-normal">AI</span>
-            </span>
+          <Link href="/">
+            <Logo />
           </Link>
 
           {/* Nav links */}

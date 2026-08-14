@@ -33,7 +33,7 @@ export default function Logo({ className = "flex items-center gap-2 group", icon
       </div>
       
       {showText && (
-        <span className="font-extrabold tracking-tight text-sm font-sans text-foreground">
+        <span className="font-serif font-black tracking-tight text-xl text-foreground select-none">
           Readify
         </span>
       )}

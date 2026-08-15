@@ -4,12 +4,13 @@ import React, { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { 
   ArrowLeft, Sidebar, Search, MessageSquare, BookOpen, 
-  Menu, ChevronRight, Volume2, Sparkles, Check, Play, RefreshCw, Loader2
+  Menu, ChevronRight, Volume2, Sparkles, Check, Play, RefreshCw, Loader2, Bookmark
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import AudioPlayer from "@/components/AudioPlayer";
 import SyncedReader from "@/components/SyncedReader";
 import AiAssistant from "@/components/AiAssistant";
+import BookmarksPanel from "@/components/BookmarksPanel";
 
 interface Book {
   id: string;
@@ -66,6 +67,7 @@ export default function ReadPage({ params }: PageProps) {
 
   // UI layout states
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [activeSidebarTab, setActiveSidebarTab] = useState<"ai" | "bookmarks">("ai");
   const [isChapterListOpen, setIsChapterListOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isChunksLoading, setIsChunksLoading] = useState(false);
@@ -446,12 +448,61 @@ export default function ReadPage({ params }: PageProps) {
 
         {/* SIDEBAR SECTION - AI NOTES & ASSISTANT */}
         {isSidebarOpen && activeChapter && (
-          <aside className="w-80 md:w-96 h-full flex-shrink-0">
-            <AiAssistant
-              bookId={bookId}
-              chapterId={activeChapter.id}
-              chapterTitle={activeChapter.title}
-            />
+          <aside className="w-80 md:w-96 h-full flex-shrink-0 flex flex-col border-l border-border/40 bg-card overflow-hidden">
+            {/* Sidebar Tabs Headers */}
+            <div className="flex border-b border-border/40 bg-muted/20">
+              <button
+                onClick={() => setActiveSidebarTab("ai")}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold border-b-2 transition-premium ${
+                  activeSidebarTab === "ai"
+                    ? "border-primary text-primary bg-background/50"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                AI Assistant
+              </button>
+              
+              <button
+                onClick={() => setActiveSidebarTab("bookmarks")}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold border-b-2 transition-premium ${
+                  activeSidebarTab === "bookmarks"
+                    ? "border-primary text-primary bg-background/50"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                }`}
+              >
+                <Bookmark className="w-3.5 h-3.5" />
+                Bookmarks
+              </button>
+            </div>
+
+            {/* Sidebar Content Area */}
+            <div className="flex-1 min-h-0">
+              {activeSidebarTab === "ai" ? (
+                <AiAssistant
+                  bookId={bookId}
+                  chapterId={activeChapter.id}
+                  chapterTitle={activeChapter.title}
+                />
+              ) : (
+                <BookmarksPanel
+                  bookId={bookId}
+                  activeChapterId={activeChapter.id}
+                  activeChapterTitle={activeChapter.title}
+                  chunks={chunks}
+                  activeChunkIndex={activeChunkIndex}
+                  onSeekToChunk={(idx) => {
+                    // Seek player to the beginning of this chunk
+                    let accumulatedTime = 0;
+                    for (let i = 0; i < idx; i++) {
+                      accumulatedTime += chunks[i]?.duration || 0;
+                    }
+                    setInitialPosition(accumulatedTime);
+                    setActiveChunkIndex(idx);
+                  }}
+                />
+              )}
+            </div>
           </aside>
         )}
       </div>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { 
   Play, Pause, SkipForward, SkipBack, RotateCcw, RotateCw, 
-  Volume2, VolumeX, Settings, ChevronUp, FastForward 
+  Volume2, VolumeX, Settings, ChevronUp, FastForward, Clock, Sliders 
 } from "lucide-react";
 
 interface AudioChunk {
@@ -54,6 +54,16 @@ export default function AudioPlayer({
   const [isSpeedOpen, setIsSpeedOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // NEW AUDIO SUITE STATES
+  const [isAudioSettingsOpen, setIsAudioSettingsOpen] = useState(false);
+  const [sleepTimer, setSleepTimer] = useState<number | null>(null);
+  const [sleepOption, setSleepOption] = useState<string>("off");
+  const [audioPreset, setAudioPreset] = useState<"normal" | "vocal" | "bass" | "treble">("normal");
+
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const filterRef = useRef<BiquadFilterNode | null>(null);
+  const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
+
   const speedOptions = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
 
   // 1. Calculate overall chapter duration when chunks change
@@ -70,6 +80,10 @@ export default function AudioPlayer({
     return () => {
       audio.pause();
       audioRef.current = null;
+      if (audioContextRef.current) {
+        audioContextRef.current.close().catch(() => {});
+        audioContextRef.current = null;
+      }
     };
   }, []);
 
@@ -127,6 +141,99 @@ export default function AudioPlayer({
     }
   }, [volume, isMuted]);
 
+  // 5.5 Sleep Timer countdown effect
+  useEffect(() => {
+    if (!isPlaying || sleepTimer === null) return;
+    
+    if (sleepTimer <= 0) {
+      setIsPlaying(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      setSleepTimer(null);
+      setSleepOption("off");
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setSleepTimer((prev) => (prev !== null ? prev - 1 : null));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isPlaying, sleepTimer]);
+
+  const handleSelectSleepOption = (option: string) => {
+    setSleepOption(option);
+    if (option === "off") {
+      setSleepTimer(null);
+    } else if (option === "chapter") {
+      setSleepTimer(null); // handled at end of chapter
+    } else {
+      const minutes = parseInt(option, 10);
+      if (!isNaN(minutes)) {
+        setSleepTimer(minutes * 60);
+      }
+    }
+  };
+
+  const formatTimer = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  };
+
+  // 5.6 Web Audio Equalizer effect
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+
+      if (!audioContextRef.current) {
+        const ctx = new AudioCtx();
+        audioContextRef.current = ctx;
+        
+        const source = ctx.createMediaElementSource(audio);
+        const filter = ctx.createBiquadFilter();
+        
+        sourceRef.current = source;
+        filterRef.current = filter;
+        
+        source.connect(filter);
+        filter.connect(ctx.destination);
+      }
+
+      const ctx = audioContextRef.current;
+      const filter = filterRef.current;
+      if (!filter || !ctx) return;
+
+      if (ctx.state === "suspended") {
+        ctx.resume();
+      }
+
+      if (audioPreset === "normal") {
+        filter.type = "allpass";
+      } else if (audioPreset === "vocal") {
+        filter.type = "peaking";
+        filter.frequency.value = 1500;
+        filter.Q.value = 1.0;
+        filter.gain.value = 6;
+      } else if (audioPreset === "bass") {
+        filter.type = "lowshelf";
+        filter.frequency.value = 200;
+        filter.gain.value = 8;
+      } else if (audioPreset === "treble") {
+        filter.type = "highshelf";
+        filter.frequency.value = 4000;
+        filter.gain.value = 6;
+      }
+    } catch (err) {
+      console.warn("Web Audio API not fully supported or blocked:", err);
+    }
+  }, [audioPreset]);
+
   // 6. Listen to audio events
   useEffect(() => {
     const audio = audioRef.current;
@@ -171,7 +278,9 @@ export default function AudioPlayer({
       } else {
         // End of chapter!
         setIsPlaying(false);
-        if (onNextChapter) {
+        if (sleepOption === "chapter") {
+          setSleepOption("off");
+        } else if (onNextChapter) {
           onNextChapter();
         }
       }
@@ -196,7 +305,7 @@ export default function AudioPlayer({
       audio.removeEventListener("canplay", handleCanPlay);
       audio.removeEventListener("waiting", handleWaiting);
     };
-  }, [activeChunkIndex, chunks, isPlaying, volume, isMuted, playbackSpeed]);
+  }, [activeChunkIndex, chunks, isPlaying, volume, isMuted, playbackSpeed, sleepOption]);
 
   // Notify parent of active chunk text on mount or chunk change
   useEffect(() => {
@@ -349,34 +458,101 @@ export default function AudioPlayer({
 
         {/* Player Controls Bar */}
         <div className="flex items-center justify-between gap-4 mt-2">
-          {/* Left Controls: Speed Selector */}
+          {/* Left Controls: Audio Settings Menu */}
           <div className="relative flex items-center w-1/4">
             <button
-              onClick={() => setIsSpeedOpen(!isSpeedOpen)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground text-xs font-medium transition-premium active:scale-95"
+              onClick={() => setIsAudioSettingsOpen(!isAudioSettingsOpen)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-muted hover:text-foreground text-xs font-semibold transition-premium active:scale-95 ${
+                isAudioSettingsOpen ? "bg-muted text-foreground" : "text-muted-foreground"
+              }`}
+              title="Configure Speed, EQ & Sleep Timer"
             >
-              <FastForward className="w-3.5 h-3.5" />
-              {playbackSpeed}x
+              <Settings className={`w-3.5 h-3.5 ${isPlaying ? "animate-[spin_6s_linear_infinite]" : ""}`} />
+              Settings
+              {sleepTimer !== null && (
+                <span className="text-[10px] text-emerald-500 font-mono font-bold ml-1 flex items-center gap-0.5">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                  {formatTimer(sleepTimer)}
+                </span>
+              )}
             </button>
 
-            {isSpeedOpen && (
+            {isAudioSettingsOpen && (
               <>
-                <div className="fixed inset-0 z-10" onClick={() => setIsSpeedOpen(false)}></div>
-                <div className="absolute bottom-10 left-0 bg-popover border border-border p-1.5 rounded-2xl shadow-xl z-20 w-24">
-                  {speedOptions.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => {
-                        setPlaybackSpeed(s);
-                        setIsSpeedOpen(false);
-                      }}
-                      className={`flex w-full items-center justify-center px-3 py-1.5 rounded-xl text-xs transition-premium ${
-                        playbackSpeed === s ? "bg-muted font-semibold" : "hover:bg-muted/50"
-                      }`}
-                    >
-                      {s}x
-                    </button>
-                  ))}
+                <div className="fixed inset-0 z-10" onClick={() => setIsAudioSettingsOpen(false)}></div>
+                <div className="absolute bottom-10 left-0 bg-card border border-border/60 p-4 rounded-2xl shadow-xl z-20 w-64 font-sans space-y-3">
+                  
+                  {/* SPEED SECTION */}
+                  <div className="space-y-1">
+                    <span className="text-[9px] uppercase font-mono tracking-wider text-muted-foreground">Playback Speed</span>
+                    <div className="grid grid-cols-5 gap-1">
+                      {[0.75, 1.0, 1.25, 1.5, 2.0].map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setPlaybackSpeed(s)}
+                          className={`py-1 rounded-md text-[10px] font-semibold transition-premium ${
+                            playbackSpeed === s ? "bg-primary text-primary-foreground" : "hover:bg-muted bg-muted/40 text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {s}x
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <hr className="border-border/40" />
+
+                  {/* SLEEP TIMER SECTION */}
+                  <div className="space-y-1">
+                    <span className="text-[9px] uppercase font-mono tracking-wider text-muted-foreground flex items-center gap-1">
+                      <Clock className="w-2.5 h-2.5" /> Sleep Timer
+                    </span>
+                    <div className="grid grid-cols-4 gap-1">
+                      {[
+                        { val: "off", lbl: "Off" },
+                        { val: "15", lbl: "15m" },
+                        { val: "30", lbl: "30m" },
+                        { val: "chapter", lbl: "End" }
+                      ].map((opt) => (
+                        <button
+                          key={opt.val}
+                          onClick={() => handleSelectSleepOption(opt.val)}
+                          className={`py-1 rounded-md text-[10px] font-semibold transition-premium ${
+                            sleepOption === opt.val ? "bg-primary text-primary-foreground" : "hover:bg-muted bg-muted/40 text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {opt.lbl}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <hr className="border-border/40" />
+
+                  {/* EQUALIZER PRESETS SECTION */}
+                  <div className="space-y-1">
+                    <span className="text-[9px] uppercase font-mono tracking-wider text-muted-foreground flex items-center gap-1">
+                      <Sliders className="w-2.5 h-2.5" /> Sound EQ Profiles
+                    </span>
+                    <div className="grid grid-cols-2 gap-1">
+                      {[
+                        { val: "normal", lbl: "Original" },
+                        { val: "vocal", lbl: "Clear" },
+                        { val: "bass", lbl: "Bass" },
+                        { val: "treble", lbl: "Bright" }
+                      ].map((preset) => (
+                        <button
+                          key={preset.val}
+                          onClick={() => setAudioPreset(preset.val as any)}
+                          className={`py-1 px-2 rounded-md text-[10px] font-semibold text-center transition-premium truncate ${
+                            audioPreset === preset.val ? "bg-primary text-primary-foreground" : "hover:bg-muted bg-muted/40 text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {preset.lbl}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </>
             )}

@@ -75,6 +75,7 @@ export default function AudioPlayer({
   // 2. Initialize audio element
   useEffect(() => {
     const audio = new Audio();
+    audio.crossOrigin = "anonymous"; // Allow cross-origin requests for Web Audio API processing
     audioRef.current = audio;
     
     return () => {

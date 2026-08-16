@@ -56,7 +56,7 @@ export default function SyncedReader({
               onClick={() => onChunkClick && onChunkClick(idx)}
               className={`group relative rounded-2xl p-4 md:p-6 transition-premium cursor-pointer border ${
                 isActive
-                  ? "bg-primary/[0.03] border-primary/20 shadow-sm"
+                  ? "reading-highlight-active border-primary/10 shadow-sm"
                   : "bg-transparent border-transparent hover:bg-muted/30"
               }`}
             >
@@ -89,7 +89,7 @@ export default function SyncedReader({
                   isActive 
                     ? "text-foreground font-semibold dark:text-white" 
                     : "text-muted-foreground/70 dark:text-muted-foreground/50 group-hover:text-foreground/90"
-                } ${!isActive && "md:pl-4" /* Indent hover item slightly to fit play button space */}`}
+                } ${!isActive && "md:pl-4"} ${idx === 0 ? "editorial-drop-cap" : ""}`}
               >
                 {chunk.text}
               </p>

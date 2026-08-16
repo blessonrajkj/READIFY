@@ -114,7 +114,7 @@ export default function AudioPlayer({
     // Set source for target chunk
     const targetChunk = chunks[targetChunkIdx];
     if (targetChunk && targetChunk.audio_url) {
-      audioRef.current.src = `http://localhost:8000${targetChunk.audio_url}`;
+      audioRef.current.src = targetChunk.audio_url;
       audioRef.current.playbackRate = playbackSpeed;
       audioRef.current.volume = isMuted ? 0 : volume;
       audioRef.current.currentTime = targetChunkOffset;
@@ -263,7 +263,7 @@ export default function AudioPlayer({
         
         const nextChunk = chunks[nextIdx];
         if (nextChunk && nextChunk.audio_url) {
-          audio.src = `http://localhost:8000${nextChunk.audio_url}`;
+          audio.src = nextChunk.audio_url;
           audio.playbackRate = playbackSpeed;
           audio.volume = isMuted ? 0 : volume;
           audio.currentTime = 0;
@@ -328,7 +328,7 @@ export default function AudioPlayer({
     } else {
       // Ensure source is loaded
       if (!audio.src && chunks[activeChunkIndex]?.audio_url) {
-        audio.src = `http://localhost:8000${chunks[activeChunkIndex].audio_url}`;
+        audio.src = chunks[activeChunkIndex].audio_url;
       }
       setIsLoading(true);
       audio.play()
@@ -388,7 +388,7 @@ export default function AudioPlayer({
       setActiveChunkIndex(targetIdx);
       const targetChunk = chunks[targetIdx];
       if (targetChunk && targetChunk.audio_url) {
-        audioRef.current.src = `http://localhost:8000${targetChunk.audio_url}`;
+        audioRef.current.src = targetChunk.audio_url;
         audioRef.current.playbackRate = playbackSpeed;
         audioRef.current.volume = isMuted ? 0 : volume;
         audioRef.current.currentTime = offset;

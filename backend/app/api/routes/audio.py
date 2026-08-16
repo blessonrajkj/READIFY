@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy.orm import Session
 from typing import List
@@ -44,7 +44,7 @@ def get_chapter_audio_chunks(book_id: str, chapter_id: str, db: Session = Depend
     return results
 
 @router.get("/chunks/{audio_chunk_id}")
-async def stream_audio_chunk(book_id: str, audio_chunk_id: str, db: Session = Depends(get_db)):
+async def stream_audio_chunk(book_id: str, audio_chunk_id: str, request: Request, db: Session = Depends(get_db)):
     """Streams a specific audio chunk MP3 file, generating it on-the-fly if pending."""
     ac = db.query(AudioChunk).filter(AudioChunk.id == audio_chunk_id).first()
     if not ac:
@@ -97,17 +97,24 @@ async def stream_audio_chunk(book_id: str, audio_chunk_id: str, db: Session = De
             raise HTTPException(status_code=500, detail=f"Speech synthesis failed: {e}")
             
     filepath = storage.get_file_path_or_url(ac.filepath)
+    origin = request.headers.get("origin", "http://localhost:3000")
     
     # If storage is local file system, return a FileResponse
     if os.path.exists(filepath):
-        return FileResponse(filepath, media_type="audio/mpeg", filename=os.path.basename(filepath))
+        response = FileResponse(filepath, media_type="audio/mpeg", filename=os.path.basename(filepath))
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        return response
         
     # If it's a URL (S3), we redirect or stream
     elif filepath.startswith("http"):
-        import httpx
-        # We can redirect
         from fastapi.responses import RedirectResponse
-        return RedirectResponse(url=filepath)
+        response = RedirectResponse(url=filepath)
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        return response
         
     raise HTTPException(status_code=404, detail="Audio file not found on storage provider")
 

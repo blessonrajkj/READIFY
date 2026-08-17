@@ -16,8 +16,8 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-[100dvh] bg-background text-foreground transition-premium relative overflow-hidden font-sans">
       {/* Cinematic Ambient Glow Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute -top-[10%] left-[5%] w-[40rem] h-[40rem] rounded-full bg-primary/5 dark:bg-white/5 blur-[140px] mix-blend-screen animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute top-[30%] -right-[10%] w-[35rem] h-[35rem] rounded-full bg-muted/20 dark:bg-white/5 blur-[120px] mix-blend-screen animate-pulse" style={{ animationDuration: '10s' }} />
+        <div className="absolute -top-[10%] left-[5%] w-[40rem] h-[40rem] rounded-full bg-primary/5 dark:bg-white/5 blur-[140px] mix-blend-screen animate-ambient-drift" />
+        <div className="absolute top-[30%] -right-[10%] w-[35rem] h-[35rem] rounded-full bg-muted/20 dark:bg-white/5 blur-[120px] mix-blend-screen animate-ambient-drift" style={{ animationDelay: '-12s' }} />
       </div>
 
       <Navbar />
@@ -75,8 +75,8 @@ export default function LandingPage() {
         >
           
           {/* Card 1: Automated Chaptering (Col-Span 2) */}
-          <div className="p-1.5 rounded-[2rem] bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10 hover:shadow-lg transition-premium md:col-span-2">
-            <div className="p-8 rounded-[calc(2rem-0.375rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex flex-col md:flex-row gap-6 h-full justify-between items-start md:items-center">
+          <div className="double-bezel-outer card-hover-glow md:col-span-2">
+            <div className="p-8 double-bezel-inner flex flex-col md:flex-row gap-6 h-full justify-between items-start md:items-center">
               <div className="flex-1">
                 <div className="w-10 h-10 rounded-2xl bg-muted flex items-center justify-center mb-6 text-foreground">
                   <Cpu className="w-5 h-5" />
@@ -104,8 +104,8 @@ export default function LandingPage() {
           </div>
 
           {/* Card 2: Synced Reader (Col-Span 1) */}
-          <div className="p-1.5 rounded-[2rem] bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10 hover:shadow-lg transition-premium">
-            <div className="p-8 rounded-[calc(2rem-0.375rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex flex-col h-full justify-between">
+          <div className="double-bezel-outer card-hover-glow">
+            <div className="p-8 double-bezel-inner flex flex-col h-full justify-between">
               <div>
                 <div className="w-10 h-10 rounded-2xl bg-muted flex items-center justify-center mb-6 text-foreground">
                   <Headphones className="w-5 h-5" />
@@ -119,8 +119,8 @@ export default function LandingPage() {
           </div>
 
           {/* Card 3: AI Book Assistant (Col-Span 1) */}
-          <div className="p-1.5 rounded-[2rem] bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10 hover:shadow-lg transition-premium">
-            <div className="p-8 rounded-[calc(2rem-0.375rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex flex-col h-full justify-between">
+          <div className="double-bezel-outer card-hover-glow">
+            <div className="p-8 double-bezel-inner flex flex-col h-full justify-between">
               <div>
                 <div className="w-10 h-10 rounded-2xl bg-muted flex items-center justify-center mb-6 text-foreground">
                   <Sparkles className="w-5 h-5" />
@@ -134,8 +134,8 @@ export default function LandingPage() {
           </div>
 
           {/* Card 4: OCR & Multilingual Speech (Col-Span 2) */}
-          <div className="p-1.5 rounded-[2rem] bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10 hover:shadow-lg transition-premium md:col-span-2">
-            <div className="p-8 rounded-[calc(2rem-0.375rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex flex-col md:flex-row gap-6 h-full justify-between items-start md:items-center">
+          <div className="double-bezel-outer card-hover-glow md:col-span-2">
+            <div className="p-8 double-bezel-inner flex flex-col md:flex-row gap-6 h-full justify-between items-start md:items-center">
               <div className="flex-1">
                 <div className="w-10 h-10 rounded-2xl bg-muted flex items-center justify-center mb-6 text-foreground">
                   <Languages className="w-5 h-5" />

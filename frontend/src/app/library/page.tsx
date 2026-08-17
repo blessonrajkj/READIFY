@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
   Play, Trash2, RefreshCw, Edit3, MoreVertical, 
-  BookOpen, CheckCircle, Clock, Plus, Loader2 
+  BookOpen, CheckCircle, Clock, Plus, Loader2, Headphones 
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import CoverImage from "@/components/CoverImage";
@@ -48,7 +48,7 @@ export default function LibraryPage() {
   const fetchBooks = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/api/books/");
+      const res = await fetch("/api/books/");
       if (res.ok) {
         const booksData = await res.json();
         setBooks(booksData);
@@ -67,11 +67,11 @@ export default function LibraryPage() {
     for (const b of booksList) {
       try {
         // Load active listening progress
-        const res = await fetch(`http://localhost:8000/api/books/${b.id}/progress/`);
+        const res = await fetch(`/api/books/${b.id}/progress/`);
         if (res.ok) {
           const pData = await res.json();
           // Load chapters to evaluate percentage
-          const chRes = await fetch(`http://localhost:8000/api/books/${b.id}/chapters/`);
+          const chRes = await fetch(`/api/books/${b.id}/chapters/`);
           if (chRes.ok) {
             const chapters = await chRes.json();
             
@@ -105,7 +105,7 @@ export default function LibraryPage() {
   const handleDeleteBook = async (bookId: string) => {
     if (!confirm("Are you sure you want to delete this book? This will permanently remove all audio chunks.")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/books/${bookId}`, {
+      const res = await fetch(`/api/books/${bookId}`, {
         method: "DELETE"
       });
       if (res.ok) {
@@ -118,7 +118,7 @@ export default function LibraryPage() {
 
   const handleReprocessBook = async (bookId: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/books/${bookId}/reprocess`, {
+      const res = await fetch(`/api/books/${bookId}/reprocess`, {
         method: "POST"
       });
       if (res.ok) {
@@ -132,12 +132,8 @@ export default function LibraryPage() {
 
   const handleSaveRename = async (bookId: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/books/${bookId}/reprocess`, {
-        // Wait, we can patch metadata directly or using a config endpoint
-        // Let's call patch on books endpoint
-      });
       // Simple implementation: send a PATCH request to /api/books/{id}
-      const patchRes = await fetch(`http://localhost:8000/api/books/${bookId}`, {
+      const patchRes = await fetch(`/api/books/${bookId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -181,8 +177,8 @@ export default function LibraryPage() {
         {/* Dashboard Stats Bento Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           {/* Stat 1 */}
-          <div className="p-1 rounded-2xl bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
-            <div className="p-5 rounded-[calc(1.5rem-0.25rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center gap-4">
+          <div className="double-bezel-outer card-hover-glow">
+            <div className="p-5 double-bezel-inner flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground"><BookOpen className="w-4 h-4" /></div>
               <div>
                 <div className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground">Total Books</div>
@@ -191,8 +187,8 @@ export default function LibraryPage() {
             </div>
           </div>
           {/* Stat 2 */}
-          <div className="p-1 rounded-2xl bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
-            <div className="p-5 rounded-[calc(1.5rem-0.25rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center gap-4">
+          <div className="double-bezel-outer card-hover-glow">
+            <div className="p-5 double-bezel-inner flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground"><Clock className="w-4 h-4" /></div>
               <div>
                 <div className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground">Processing</div>
@@ -201,8 +197,8 @@ export default function LibraryPage() {
             </div>
           </div>
           {/* Stat 3 */}
-          <div className="p-1 rounded-2xl bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
-            <div className="p-5 rounded-[calc(1.5rem-0.25rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center gap-4">
+          <div className="double-bezel-outer card-hover-glow">
+            <div className="p-5 double-bezel-inner flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground"><CheckCircle className="w-4 h-4" /></div>
               <div>
                 <div className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground">Completed</div>
@@ -211,9 +207,9 @@ export default function LibraryPage() {
             </div>
           </div>
           {/* Stat 4 */}
-          <div className="p-1 rounded-2xl bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10">
-            <div className="p-5 rounded-[calc(1.5rem-0.25rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground"><Play className="w-4 h-4" /></div>
+          <div className="double-bezel-outer card-hover-glow">
+            <div className="p-5 double-bezel-inner flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground"><Headphones className="w-4 h-4" /></div>
               <div>
                 <div className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground">Listening</div>
                 <div className="text-lg font-bold">{books.filter((b) => progress[b.id]?.percent > 0 && progress[b.id]?.percent < 100).length}</div>
@@ -247,8 +243,8 @@ export default function LibraryPage() {
 
               return (
                 // Double Bezel card structure
-                <div key={book.id} className="group p-1.5 rounded-[2rem] bg-black/5 dark:bg-white/5 ring-1 ring-black/5 dark:ring-white/10 transition-premium hover:scale-[1.01] hover:shadow-2xl hover:ring-black/10 dark:hover:ring-white/20">
-                  <div className="relative p-4 rounded-[calc(2rem-0.375rem)] bg-card shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] flex flex-col justify-between h-full min-h-[350px]">
+                <div key={book.id} className="group double-bezel-outer card-hover-glow transition-premium">
+                  <div className="relative p-4 double-bezel-inner flex flex-col justify-between h-full min-h-[350px]">
                     
                     {/* Menu Button / Dropdown */}
                     <div className="absolute right-6 top-6 z-10">

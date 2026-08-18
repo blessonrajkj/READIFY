@@ -1,16 +1,32 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Volume2, Sparkles, Headphones, Shield, Cpu, Languages, Eye } from "lucide-react";
+import { motion, Variants } from "framer-motion";
 import Navbar from "@/components/Navbar";
 
 export default function LandingPage() {
-  const [isMounted, setIsMounted] = useState(false);
+  // Bento Grid animations triggered when scrolled into view
+  const bentoContainerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.3
+      }
+    }
+  };
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const bentoCardVariants: Variants = {
+    hidden: { opacity: 0, y: 30, scale: 0.98 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { type: "spring", stiffness: 50, damping: 16 } 
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-[100dvh] bg-background text-foreground transition-premium relative overflow-hidden font-sans">
@@ -25,29 +41,33 @@ export default function LandingPage() {
       {/* Main Hero Section */}
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-28 md:py-44 max-w-5xl mx-auto w-full text-center z-10">
 
-        {/* Hero Headlines with staggered mount animation */}
-        <h1 
-          className={`text-4xl md:text-7xl font-extrabold tracking-tight text-foreground max-w-3xl leading-[1.05] transition-premium duration-1000 delay-100 transform ${
-            isMounted ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
+        {/* Hero Headlines with spring motion frame */}
+        <motion.h1 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 50, damping: 15, delay: 0.1 }}
+          className="text-4xl md:text-7xl font-extrabold tracking-tight text-foreground max-w-3xl leading-[1.05]"
         >
           Read with Your Ears. <br />
           <span className="text-muted-foreground/60 dark:text-muted-foreground/40">Listen with Your Eyes.</span>
-        </h1>
+        </motion.h1>
         
-        <p 
-          className={`mt-8 text-xs md:text-sm text-muted-foreground/80 max-w-xl leading-relaxed transition-premium duration-1000 delay-200 transform ${
-            isMounted ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
+        {/* Subtitle description motion frame */}
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 50, damping: 15, delay: 0.25 }}
+          className="mt-8 text-xs md:text-sm text-muted-foreground/80 max-w-xl leading-relaxed"
         >
-          Readify AI transforms books, technical manuals, and scanned PDFs into natural, high-fidelity neural audiobooks. Extract chapters, highlight text as it's spoken, and converse with your pages.
-        </p>
+          Readify transforms books, technical manuals, and scanned PDFs into natural, high-fidelity neural audiobooks. Extract chapters, highlight text as it's spoken, and converse with your pages.
+        </motion.p>
 
-        {/* Call to Actions - Button in Button Pattern with mount animation */}
-        <div 
-          className={`mt-12 flex flex-col sm:flex-row items-center gap-4 transition-premium duration-1000 delay-300 transform ${
-            isMounted ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
+        {/* Call to Actions - Scale-in spring motion frame */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ type: "spring", stiffness: 60, damping: 12, delay: 0.4 }}
+          className="mt-12 flex flex-col sm:flex-row items-center gap-4"
         >
           <Link 
             href="/library" 
@@ -65,17 +85,22 @@ export default function LandingPage() {
           >
             Upload PDF Book
           </Link>
-        </div>
+        </motion.div>
 
-        {/* Asymmetrical Bento Grid with delayed entry */}
-        <div 
-          className={`mt-32 md:mt-48 w-full grid grid-cols-1 md:grid-cols-3 gap-6 text-left transition-premium duration-1000 delay-500 transform ${
-            isMounted ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
-          }`}
+        {/* Asymmetrical Bento Grid with staggered scroll reveal */}
+        <motion.div 
+          variants={bentoContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="mt-32 md:mt-48 w-full grid grid-cols-1 md:grid-cols-3 gap-6 text-left"
         >
           
           {/* Card 1: Automated Chaptering (Col-Span 2) */}
-          <div className="double-bezel-outer card-hover-glow md:col-span-2">
+          <motion.div 
+            variants={bentoCardVariants}
+            className="double-bezel-outer card-hover-glow md:col-span-2"
+          >
             <div className="p-8 double-bezel-inner flex flex-col md:flex-row gap-6 h-full justify-between items-start md:items-center">
               <div className="flex-1">
                 <div className="w-10 h-10 rounded-2xl bg-muted flex items-center justify-center mb-6 text-foreground">
@@ -101,10 +126,13 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 2: Synced Reader (Col-Span 1) */}
-          <div className="double-bezel-outer card-hover-glow">
+          <motion.div 
+            variants={bentoCardVariants}
+            className="double-bezel-outer card-hover-glow"
+          >
             <div className="p-8 double-bezel-inner flex flex-col h-full justify-between">
               <div>
                 <div className="w-10 h-10 rounded-2xl bg-muted flex items-center justify-center mb-6 text-foreground">
@@ -116,10 +144,13 @@ export default function LandingPage() {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 3: AI Book Assistant (Col-Span 1) */}
-          <div className="double-bezel-outer card-hover-glow">
+          <motion.div 
+            variants={bentoCardVariants}
+            className="double-bezel-outer card-hover-glow"
+          >
             <div className="p-8 double-bezel-inner flex flex-col h-full justify-between">
               <div>
                 <div className="w-10 h-10 rounded-2xl bg-muted flex items-center justify-center mb-6 text-foreground">
@@ -131,10 +162,13 @@ export default function LandingPage() {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 4: OCR & Multilingual Speech (Col-Span 2) */}
-          <div className="double-bezel-outer card-hover-glow md:col-span-2">
+          <motion.div 
+            variants={bentoCardVariants}
+            className="double-bezel-outer card-hover-glow md:col-span-2"
+          >
             <div className="p-8 double-bezel-inner flex flex-col md:flex-row gap-6 h-full justify-between items-start md:items-center">
               <div className="flex-1">
                 <div className="w-10 h-10 rounded-2xl bg-muted flex items-center justify-center mb-6 text-foreground">
@@ -151,13 +185,13 @@ export default function LandingPage() {
                 <span className="px-3 py-1 rounded-full border border-border bg-muted/30 text-[10px] font-bold">Hindi (हिन्दी)</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
       </main>
 
       <footer className="border-t border-border/40 py-12 text-center text-xs text-muted-foreground/60 font-sans bg-muted/[0.02] z-10">
-        <p>&copy; {new Date().getFullYear()} Readify AI. Engineered for deep reading. Upload responsibly.</p>
+        <p>&copy; {new Date().getFullYear()} Readify. Engineered for deep reading. Upload responsibly.</p>
       </footer>
     </div>
   );

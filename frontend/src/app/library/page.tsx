@@ -6,6 +6,7 @@ import {
   Play, Trash2, RefreshCw, Edit3, MoreVertical, 
   BookOpen, CheckCircle, Clock, Plus, Loader2, Headphones 
 } from "lucide-react";
+import { motion, Variants } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import CoverImage from "@/components/CoverImage";
 
@@ -31,6 +32,45 @@ interface ProgressMap {
 }
 
 export default function LibraryPage() {
+  // Framer Motion animation variants
+  const statsContainerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.06
+      }
+    }
+  };
+
+  const statsCardVariants: Variants = {
+    hidden: { opacity: 0, y: 15, scale: 0.98 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { type: "spring", stiffness: 60, damping: 14 }
+    }
+  };
+
+  const booksContainerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.06
+      }
+    }
+  };
+
+  const bookCardVariants: Variants = {
+    hidden: { opacity: 0, y: 25, scale: 0.98 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { type: "spring", stiffness: 50, damping: 15 }
+    }
+  };
+
   const [books, setBooks] = useState<Book[]>([]);
   const [progress, setProgress] = useState<ProgressMap>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -174,10 +214,15 @@ export default function LibraryPage() {
           </Link>
         </div>
 
-        {/* Dashboard Stats Bento Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        {/* Dashboard Stats Bento Grid with entry motion frames */}
+        <motion.div 
+          variants={statsContainerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
+        >
           {/* Stat 1 */}
-          <div className="double-bezel-outer card-hover-glow">
+          <motion.div variants={statsCardVariants} className="double-bezel-outer card-hover-glow">
             <div className="p-5 double-bezel-inner flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground"><BookOpen className="w-4 h-4" /></div>
               <div>
@@ -185,9 +230,9 @@ export default function LibraryPage() {
                 <div className="text-lg font-bold">{totalBooks}</div>
               </div>
             </div>
-          </div>
+          </motion.div>
           {/* Stat 2 */}
-          <div className="double-bezel-outer card-hover-glow">
+          <motion.div variants={statsCardVariants} className="double-bezel-outer card-hover-glow">
             <div className="p-5 double-bezel-inner flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground"><Clock className="w-4 h-4" /></div>
               <div>
@@ -195,9 +240,9 @@ export default function LibraryPage() {
                 <div className="text-lg font-bold">{processingBooks}</div>
               </div>
             </div>
-          </div>
+          </motion.div>
           {/* Stat 3 */}
-          <div className="double-bezel-outer card-hover-glow">
+          <motion.div variants={statsCardVariants} className="double-bezel-outer card-hover-glow">
             <div className="p-5 double-bezel-inner flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground"><CheckCircle className="w-4 h-4" /></div>
               <div>
@@ -205,9 +250,9 @@ export default function LibraryPage() {
                 <div className="text-lg font-bold">{completedBooks}</div>
               </div>
             </div>
-          </div>
+          </motion.div>
           {/* Stat 4 */}
-          <div className="double-bezel-outer card-hover-glow">
+          <motion.div variants={statsCardVariants} className="double-bezel-outer card-hover-glow">
             <div className="p-5 double-bezel-inner flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground"><Headphones className="w-4 h-4" /></div>
               <div>
@@ -215,8 +260,8 @@ export default function LibraryPage() {
                 <div className="text-lg font-bold">{books.filter((b) => progress[b.id]?.percent > 0 && progress[b.id]?.percent < 100).length}</div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Books List Grid */}
         {isLoading ? (
@@ -234,7 +279,12 @@ export default function LibraryPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <motion.div 
+            variants={booksContainerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+          >
             {books.map((book) => {
               const bookProgress = progress[book.id] || { chapterTitle: "Start listening", percent: 0 };
               const isProcessing = book.status === "processing" || book.status === "pending";
@@ -242,8 +292,12 @@ export default function LibraryPage() {
               const isRenaming = renamingId === book.id;
 
               return (
-                // Double Bezel card structure
-                <div key={book.id} className="group double-bezel-outer card-hover-glow transition-premium">
+                // Double Bezel card structure with hover glow and motion entry frame
+                <motion.div 
+                  key={book.id} 
+                  variants={bookCardVariants}
+                  className="group double-bezel-outer card-hover-glow transition-premium"
+                >
                   <div className="relative p-4 double-bezel-inner flex flex-col justify-between h-full min-h-[350px]">
                     
                     {/* Menu Button / Dropdown */}
@@ -393,10 +447,10 @@ export default function LibraryPage() {
                       )}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         )}
       </main>
     </div>

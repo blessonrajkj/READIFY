@@ -3,127 +3,148 @@
 # READIFY
 
 ### **Read with Your Eyes.**
-
 ### **Listen with Your Ears.**
 
 <br>
 
-**Turn books into immersive listening experiences.**
+**Transform your books into immersive audiobook experiences.**
 
-READIFY transforms PDF books, technical documents, and scanned pages into structured audiobooks with synchronized reading, intelligent chapter detection, AI-powered book assistance, and a premium listening experience.
+READIFY is an AI-powered reading platform that converts PDF books and scanned documents into structured, listenable audiobooks — while keeping the original reading experience connected to the audio.
 
 <br>
 
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge\&logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)](https://www.typescriptlang.org/)
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge\&logo=python\&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.139-009688?style=for-the-badge\&logo=fastapi\&logoColor=white)](https://fastapi.tiangolo.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?style=for-the-badge\&logo=postgresql\&logoColor=white)](https://www.postgresql.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+
+<br>
+
+<a href="https://blessonrajkj.github.io/READIFY/">
+  <img src="https://img.shields.io/badge/LIVE%20DEMO-Explore%20READIFY-white?style=for-the-badge" alt="Live Demo">
+</a>
 
 </div>
 
 ---
 
-## The idea
+# The Idea
 
-Books are designed to be read.
+Books are traditionally designed to be read.
 
-But sometimes, you want to **listen**.
+But reading isn't always convenient.
 
-Maybe you're travelling.
+You might be:
 
-Maybe you're coding.
+- commuting
+- exercising
+- working
+- coding
+- travelling
+- studying
+- resting your eyes
 
-Maybe you're working out.
+**READIFY changes how you experience the books you already own.**
 
-Maybe you're revising.
-
-Maybe your eyes are tired.
-
-**READIFY turns the books you already have into something you can listen to.**
+Instead of keeping a book trapped inside a PDF:
 
 ```text
-                 YOUR PDF
-                    │
-                    ▼
-            ┌───────────────┐
-            │   EXTRACTION  │
-            └───────┬───────┘
-                    │
-             ┌──────┴──────┐
-             │             │
-             ▼             ▼
-         TEXT PDF      SCANNED PDF
-             │             │
-             │            OCR
-             │             │
-             └──────┬──────┘
-                    ▼
-              TEXT CLEANING
-                    │
-                    ▼
-            CHAPTER DETECTION
-                    │
-                    ▼
-             SMART CHUNKING
-                    │
-                    ▼
-              TTS SYNTHESIS
-                    │
-                    ▼
-              AUDIOBOOK
-                    │
-          ┌─────────┼─────────┐
-          ▼         ▼         ▼
-       LISTEN      READ       ASK AI
+                         YOUR BOOK
+                            │
+                            ▼
+                     ┌─────────────┐
+                     │    PDF      │
+                     └──────┬──────┘
+                            │
+                            ▼
+                    TEXT EXTRACTION
+                            │
+                    ┌───────┴───────┐
+                    │               │
+                    ▼               ▼
+                 DIGITAL         SCANNED
+                   PDF              PDF
+                    │               │
+                    │              OCR
+                    │               │
+                    └───────┬───────┘
+                            ▼
+                      TEXT CLEANING
+                            │
+                            ▼
+                    CHAPTER DETECTION
+                            │
+                            ▼
+                        CHUNKING
+                            │
+                            ▼
+                       TTS ENGINE
+                            │
+                            ▼
+                      AUDIOBOOK
+                            │
+                ┌───────────┼───────────┐
+                ▼           ▼           ▼
+              LISTEN       READ       ASK AI
 ```
 
+**One book. Multiple ways to experience it.**
+
 ---
 
-# EXPERIENCE READIFY
+# A Glimpse Inside READIFY
+
+## The Experience
 
 <p align="center">
-  <img src="screenshots/landing_page.jpg" width="90%" alt="READIFY Landing Page">
+  <img src="./screenshots/landing.png" width="95%" alt="READIFY Landing Page">
 </p>
 
-### A calm reading environment.
+<p align="center">
+  <strong>A minimal interface designed around the content.</strong>
+  <br>
+  <sub>Less distraction. More reading. More listening.</sub>
+</p>
 
-The interface is deliberately minimal.
-
-No unnecessary clutter.
-
-Just your books, your words, and your listening experience.
-
----
+<br>
 
 ## Your Library
 
 <p align="center">
-  <img src="screenshots/reader_interface.jpg" width="90%" alt="READIFY Reader Interface">
+  <img src="./screenshots/library.png" width="95%" alt="READIFY Library">
 </p>
 
-Your library becomes your personal audiobook shelf.
+<p align="center">
+  <strong>Your personal audiobook library.</strong>
+  <br>
+  <sub>Manage your books, track progress and continue listening from where you stopped.</sub>
+</p>
 
-From here you can:
+<br>
 
-* Browse uploaded books
-* View processing status
-* Continue listening
-* Track progress
-* Open books
-* Upload new PDFs
-* Manage your reading collection
+## From PDF to Audiobook
+
+<p align="center">
+  <img src="./screenshots/upload.png" width="95%" alt="READIFY PDF Upload">
+</p>
+
+<p align="center">
+  <strong>Drop a PDF. Let READIFY do the rest.</strong>
+  <br>
+  <sub>Upload your book and transform it into a high-fidelity listening experience.</sub>
+</p>
 
 ---
 
-# WHAT MAKES READIFY DIFFERENT?
+# Why READIFY?
 
 Most PDF readers stop at:
 
-> **"Here's your document."**
+> **"Here is your document."**
 
-READIFY asks:
+READIFY goes further:
 
 > **"How do you want to experience it?"**
 
@@ -131,105 +152,172 @@ You can:
 
 ```text
 READ
-  │
-  ├── Follow the original text
-  │
-  ├── Jump between chapters
-  │
-  └── Track your position
+ │
+ ├── Follow the original text
+ ├── Navigate chapters
+ ├── Track your position
+ └── Continue where you stopped
 
 LISTEN
-  │
-  ├── Natural neural voices
-  │
-  ├── Adjust playback speed
-  │
-  ├── Skip forward/backward
-  │
-  ├── Use sleep timer
-  │
-  └── Customize audio
+ │
+ ├── Natural neural voices
+ ├── Control playback speed
+ ├── Skip forward / backward
+ ├── Adjust audio
+ └── Set a sleep timer
 
 UNDERSTAND
-  │
-  ├── Chapter summaries
-  │
-  ├── Key takeaways
-  │
-  ├── Important concepts
-  │
-  └── Ask the book questions
+ │
+ ├── Generate summaries
+ ├── Extract key takeaways
+ ├── Ask questions
+ └── Search your book intelligently
 ```
 
 ---
 
-# CORE FEATURES
+# What READIFY Can Do
 
-## 01 — PDF → AUDIOBOOK
+### PDF → Audiobook
 
-Drop a PDF into READIFY.
+Turn a PDF into structured audio.
 
-The processing pipeline handles the rest.
+### Scanned PDF → Text
+
+Use OCR to extract content from scanned documents.
+
+### Text → Natural Speech
+
+Generate audiobook audio using configurable TTS providers.
+
+### Automatic Chapters
+
+Detect chapter and section boundaries.
+
+### Synchronized Reading
+
+Follow the spoken content while reading the original text.
+
+### AI Book Assistant
+
+Ask questions about the book and receive contextual answers.
+
+### Personal Library
+
+Keep all your generated audiobooks in one place.
+
+### Progress Tracking
+
+Continue listening from exactly where you stopped.
+
+---
+
+# The READIFY Pipeline
+
+A book passes through multiple stages before it becomes an audiobook.
+
+```text
+                    ┌───────────────┐
+                    │   PDF BOOK    │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │ File Validation│
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │ Text / OCR     │
+                    │ Extraction     │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │ Text Cleaning  │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │ Chapter        │
+                    │ Detection      │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │ Smart Chunking │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │ AI Summaries   │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │ TTS Generation │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │   AUDIOBOOK   │
+                    └───────┬───────┘
+                            │
+             ┌──────────────┼──────────────┐
+             ▼              ▼              ▼
+           LISTEN          READ           ASK
+             │              │              │
+             └──────────────┼──────────────┘
+                            ▼
+                      UNDERSTAND MORE
+```
+
+---
+
+# Intelligent PDF Processing
+
+## Digital PDFs
+
+For normal text-based PDFs, READIFY extracts the document content directly.
 
 ```text
 PDF
  ↓
-Metadata
- ↓
 Text Extraction
- ↓
-OCR if required
  ↓
 Cleaning
  ↓
-Chapter Detection
- ↓
-Text Chunking
- ↓
-Audio Generation
- ↓
-Ready to Listen
+Structure Detection
 ```
 
-The upload pipeline supports PDFs up to **100 MB**.
+## Scanned PDFs
 
----
+Some PDFs contain images instead of selectable text.
 
-## 02 — SCANNED PDF SUPPORT
-
-Not every PDF contains selectable text.
-
-Some are simply scanned pages.
-
-READIFY detects when a document appears to contain little extractable text and can route those pages through OCR using **EasyOCR**.
+READIFY can detect documents with insufficient extracted text and use OCR.
 
 ```text
-DIGITAL PDF
-     │
-     ▼
-Text Extraction
-     │
-     ▼
-     ✓
-
 SCANNED PDF
      │
      ▼
-OCR
+   OCR
      │
      ▼
 Extracted Text
+     │
+     ▼
+Cleaned Content
 ```
 
-This means READIFY isn't limited to perfectly digital books.
+This makes READIFY useful for more than perfectly formatted digital books.
 
 ---
 
-# 03 — INTELLIGENT TEXT CLEANING
+# Intelligent Text Cleaning
 
-Raw PDF extraction can be messy.
+Raw PDF extraction can contain unwanted formatting artifacts.
 
-You may encounter:
+Examples include:
 
 ```text
 page numbers
@@ -237,12 +325,12 @@ headers
 footers
 broken lines
 hyphenated words
-OCR artifacts
-repeated titles
+repeated headings
 excess whitespace
+OCR artifacts
 ```
 
-READIFY cleans the extracted text before sending it to speech synthesis.
+READIFY cleans and normalizes extracted text before processing it for speech.
 
 For example:
 
@@ -263,29 +351,36 @@ The goal is simple:
 
 ---
 
-# 04 — AUTOMATIC CHAPTER DETECTION
+# Automatic Chapter Detection
 
-READIFY analyzes extracted pages and looks for common structural patterns such as:
+READIFY analyzes extracted content for common structural patterns.
+
+Examples:
 
 ```text
 Chapter 1
 Chapter 2
-Section 3
-Part IV
-Unit 5
-Book II
+
+Part I
+Part II
+
+Section 1
+Section 2
+
+Unit 1
+Unit 2
 ```
 
-When chapter headings aren't detected, READIFY can fall back to page-based grouping.
+When chapter headings cannot be confidently identified, the system can fall back to page-based grouping.
 
-This turns an unstructured PDF into a navigable audiobook.
+The result:
 
 ```text
 RAW PDF
 
-Page 01
-Page 02
-Page 03
+Page 001
+Page 002
+Page 003
 ...
 Page 200
 
@@ -302,85 +397,62 @@ Chapter 4
 
 ---
 
-# 05 — CHAPTER CONTROL
+# Audiobook Generation
 
-Your book structure isn't always perfect.
+READIFY supports configurable speech providers.
 
-READIFY provides chapter-level controls for working with the generated structure.
+## Edge TTS
 
-You can build toward a reading experience where chapters can be:
+The default option for neural speech generation.
+
+Useful for generating natural audiobook-style narration without requiring a paid API key.
+
+## OpenAI TTS
+
+Optional OpenAI-powered speech generation.
+
+## ElevenLabs
+
+Optional ElevenLabs speech generation.
 
 ```text
-RENAME
-DELETE
-MERGE
-SPLIT
+                    READIFY TTS
+                         │
+              ┌──────────┼──────────┐
+              ▼          ▼          ▼
+          EDGE TTS     OPENAI    ELEVENLABS
+              │          │          │
+              └──────────┼──────────┘
+                         ▼
+                    AUDIO OUTPUT
 ```
 
-Instead of forcing you to accept the structure produced by the original PDF.
+The provider can be selected through configuration.
 
 ---
 
-# 06 — MULTI-ENGINE TEXT TO SPEECH
-
-READIFY supports multiple TTS providers.
-
-### Microsoft Edge TTS
-
-The default option.
-
-Natural neural voices without requiring an API key.
-
-Supports configured voices for languages including:
-
-```text
-English
-Tamil
-Hindi
-```
-
-### OpenAI TTS
-
-For users who want OpenAI's speech generation.
-
-### ElevenLabs
-
-For users who want ElevenLabs voice synthesis.
-
-```text
-                   READIFY TTS
-                       │
-          ┌────────────┼────────────┐
-          ▼            ▼            ▼
-       EDGE TTS     OPENAI       ELEVENLABS
-          │            │            │
-          └────────────┼────────────┘
-                       ▼
-                   AUDIO FILE
-```
-
-The provider can be configured through environment settings.
-
----
-
-# 07 — A REAL AUDIOBOOK PLAYER
+# A Real Audiobook Player
 
 READIFY isn't simply:
 
-> PDF → MP3
+```text
+PDF → MP3
+```
 
-The listening experience includes:
+It provides a complete listening experience.
 
-### Playback
+## Playback
 
-* Play / Pause
-* Previous chapter
-* Next chapter
-* Seek through chapter
-* Skip backward 10 seconds
-* Skip forward 30 seconds
+- Play / Pause
+- Previous chapter
+- Next chapter
+- Seek through chapter
+- Skip backward
+- Skip forward
+- Volume control
+- Mute
 
-### Speed
+## Playback Speed
 
 ```text
 0.5x
@@ -392,416 +464,364 @@ The listening experience includes:
 2.0x
 ```
 
-### Audio
-
-* Volume control
-* Mute
-* Audio presets
-* Vocal mode
-* Bass mode
-* Treble mode
-
-### Sleep
+## Sleep Timer
 
 ```text
-5 min
-10 min
-15 min
-30 min
-45 min
-60 min
+5 minutes
+10 minutes
+15 minutes
+30 minutes
+45 minutes
+60 minutes
 End of chapter
 ```
 
-Perfect for late-night listening.
+Perfect for listening before sleep or during long sessions.
 
 ---
 
-# 08 — SYNCHRONIZED READING
+# Synchronized Reading
 
-READIFY connects the audio experience with the text.
+READIFY connects the audiobook with the original text.
 
 ```text
-        AUDIO
-          │
-          ▼
-      CURRENT CHUNK
-          │
-          ▼
-     TEXT HIGHLIGHT
-          │
-          ▼
-      READING VIEW
+             AUDIO
+               │
+               ▼
+        CURRENT AUDIO CHUNK
+               │
+               ▼
+         TEXT POSITION
+               │
+               ▼
+        READING HIGHLIGHT
 ```
 
-The reader can follow the spoken content while reading.
+Instead of choosing between reading and listening:
 
-Clicking text can also be used to move toward the corresponding audio position.
-
-The result is somewhere between:
-
-**ebook + audiobook + synchronized reader**
+> **READIFY lets you do both.**
 
 ---
 
-# 09 — AI BOOK ASSISTANT
+# AI-Powered Book Assistant
 
-Your book can become interactive.
+A book shouldn't just be something you consume.
 
-Instead of searching through hundreds of pages manually:
+It can become something you interact with.
 
-```text
-YOU
- │
- │ "What is the main idea of this chapter?"
- ▼
-READIFY AI
- │
- ▼
-RELEVANT BOOK PASSAGES
- │
- ▼
-AI RESPONSE
-```
-
-The assistant can provide:
-
-### Chapter Notes
-
-* Summary
-* Key takeaways
-* Important concepts
-* Estimated listening time
-
-### Ask Assistant
-
-Ask questions about the book and receive answers grounded in retrieved passages.
-
-The assistant also returns source information such as:
+Ask questions like:
 
 ```text
-Chapter
-Page
-Relevant passage
+"What is this chapter about?"
+
+"What are the main ideas?"
+
+"Explain this concept simply."
+
+"What did the author mean by this?"
+
+"What are the key takeaways?"
 ```
+
+READIFY can retrieve relevant content from the book before generating an answer.
 
 ---
 
-# 10 — RETRIEVAL-BASED BOOK CHAT
+# Retrieval-Augmented Book Chat
 
-The AI assistant doesn't simply receive your question and guess.
-
-READIFY first searches the book for relevant content.
-
-The retrieval layer can use:
+The AI layer can use a retrieval pipeline instead of blindly answering questions.
 
 ```text
-Gemini Embeddings
-       │
-       ▼
-Cosine Similarity
-       │
-       ▼
-Top Relevant Chunks
-       │
-       ▼
-Gemini Generation
-       │
-       ▼
-Answer + Sources
+                     USER QUESTION
+                           │
+                           ▼
+                   QUERY PROCESSING
+                           │
+                           ▼
+                 SEMANTIC RETRIEVAL
+                           │
+                           ▼
+                  RELEVANT CHUNKS
+                           │
+                           ▼
+                    AI GENERATION
+                           │
+                           ▼
+                 CONTEXTUAL ANSWER
+                           │
+                           ▼
+                    SOURCE CONTEXT
 ```
 
-When Gemini isn't configured, the system can fall back to local TF-IDF retrieval.
+The retrieval layer can use embeddings and similarity search.
 
-That gives READIFY a useful offline-friendly retrieval path even without
-the AI generation layer.
+A local TF-IDF fallback can also be used when semantic AI retrieval is unavailable.
 
 ---
 
-# 11 — AUTHENTICATION
+# AI Reading Tools
 
-READIFY includes user authentication using:
+READIFY can turn chapters into useful study material.
 
-```text
-Signup
-   ↓
-Password Hashing
-   ↓
-JWT Authentication
-   ↓
-Protected User Context
-```
+### Chapter Summary
 
-Passwords are hashed using **bcrypt** rather than being stored directly.
+Understand a chapter without rereading every page.
 
-JWT tokens are used for authenticated API access.
+### Key Takeaways
+
+Extract the most important ideas.
+
+### Important Concepts
+
+Identify concepts worth remembering.
+
+### Book Questions
+
+Ask the book directly through the AI assistant.
 
 ---
 
-# 12 — PROGRESS MEMORY
+# Your Personal Library
 
-You don't have to remember where you stopped.
+The library is more than a list of uploaded PDFs.
 
-READIFY tracks listening progress and playback speed.
+It provides a personal audiobook workspace.
+
+```text
+┌─────────────────────────────────────┐
+│             YOUR LIBRARY             │
+├─────────────────────────────────────┤
+│                                     │
+│  TOTAL BOOKS      PROCESSING        │
+│       03              00            │
+│                                     │
+│  COMPLETED        LISTENING         │
+│       03              00            │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+Each book can contain:
+
+- Cover
+- Title
+- Author
+- Chapter information
+- Progress
+- Listening state
+- Continue listening action
+
+---
+
+# Progress That Remembers
+
+You shouldn't have to remember where you stopped.
+
+READIFY can persist listening progress and playback preferences.
 
 ```text
 BOOK
  │
  ├── Chapter
- │     ├── Position
- │     └── Speed
+ │
+ ├── Position
+ │
+ ├── Playback Speed
  │
  └── Continue Listening
 ```
 
-So when you come back:
+Come back later.
 
-> **Continue where you left off.**
+Press play.
 
----
-
-# 13 — THE PROCESSING ENGINE
-
-Large PDF processing shouldn't block the user interface.
-
-READIFY uses a background worker architecture.
-
-```text
-              USER
-                │
-                ▼
-             UPLOAD
-                │
-                ▼
-          CREATE JOB
-                │
-                ▼
-       ┌─────────────────┐
-       │ BACKGROUND WORKER│
-       └────────┬────────┘
-                │
-        ┌───────┼────────┐
-        ▼       ▼        ▼
-       OCR    CHAPTER    TTS
-                │
-                ▼
-             AUDIO
-                │
-                ▼
-             COMPLETE
-```
-
-Processing progresses through stages such as:
-
-```text
-10%  → Text extraction / OCR
-40%  → OCR complete
-45%  → Chapter detection
-50%  → Text processing
-95%  → Audio generation
-100% → Completed
-```
-
-The worker uses database-backed job locking so multiple workers can safely
-process pending jobs.
+Keep going.
 
 ---
 
-# 14 — ARCHITECTURE
+# Authentication
+
+READIFY includes authenticated user access.
 
 ```text
-┌──────────────────────────────────────────────────────┐
-│                    READIFY CLIENT                    │
-│                                                      │
-│              Next.js + React + TypeScript            │
-│                                                      │
-│  Landing │ Library │ Upload │ Reader │ Settings      │
-└─────────────────────────┬────────────────────────────┘
-                          │
-                          │ REST API
-                          ▼
-┌──────────────────────────────────────────────────────┐
-│                    FASTAPI API                       │
-│                                                      │
-│ Authentication │ Books │ Chapters │ Audio            │
-│ Progress       │ Search │ Assistant                  │
-└───────────────┬──────────────────┬───────────────────┘
+SIGN UP
+   │
+   ▼
+PASSWORD HASHING
+   │
+   ▼
+JWT AUTHENTICATION
+   │
+   ▼
+PROTECTED USER DATA
+```
+
+Passwords are hashed rather than stored directly.
+
+JWT tokens are used to protect authenticated API requests.
+
+---
+
+# Background Processing
+
+Large books can take time to process.
+
+Instead of keeping the main API request busy, READIFY uses background processing.
+
+```text
+                    USER
+                     │
+                     ▼
+                   UPLOAD
+                     │
+                     ▼
+                 CREATE JOB
+                     │
+                     ▼
+            ┌──────────────────┐
+            │ BACKGROUND WORKER│
+            └────────┬─────────┘
+                     │
+          ┌──────────┼──────────┐
+          ▼          ▼          ▼
+         OCR      CHAPTERS      TTS
+          │          │          │
+          └──────────┼──────────┘
+                     ▼
+                  AUDIO
+                     │
+                     ▼
+                COMPLETED
+```
+
+This allows the application to remain responsive while books are being processed.
+
+---
+
+# Processing Lifecycle
+
+A typical processing job can move through stages such as:
+
+```text
+10%   Text extraction / OCR
+40%   OCR completed
+45%   Chapter detection
+50%   Text processing
+95%   Audio generation
+100%  Completed
+```
+
+The worker architecture is designed to safely handle queued processing jobs.
+
+---
+
+# Architecture
+
+```text
+┌─────────────────────────────────────────────────────┐
+│                    READIFY CLIENT                   │
+│                                                     │
+│            Next.js + React + TypeScript             │
+│                                                     │
+│   Landing │ Library │ Upload │ Reader │ Settings    │
+└──────────────────────────┬──────────────────────────┘
+                           │
+                           │ REST API
+                           ▼
+┌─────────────────────────────────────────────────────┐
+│                    FASTAPI API                      │
+│                                                     │
+│ Authentication │ Books │ Chapters │ Audio           │
+│ Progress       │ Search │ Assistant                 │
+└───────────────┬──────────────────┬──────────────────┘
                 │                  │
                 ▼                  ▼
-        ┌─────────────┐     ┌───────────────┐
-        │ PostgreSQL  │     │ File Storage   │
-        │             │     │               │
-        │ Users       │     │ PDFs          │
-        │ Books       │     │ Covers        │
-        │ Chapters    │     │ Audio         │
-        │ Jobs        │     │               │
-        └─────────────┘     └───────────────┘
+       ┌────────────────┐   ┌────────────────┐
+       │   PostgreSQL   │   │ File Storage   │
+       │                │   │                │
+       │ Users          │   │ PDFs           │
+       │ Books          │   │ Covers         │
+       │ Chapters       │   │ Audio          │
+       │ Jobs           │   │                │
+       └────────────────┘   └────────────────┘
                 │
                 ▼
-       ┌────────────────────┐
-       │ Background Worker  │
-       │                    │
-       │ PDF Processing     │
-       │ OCR                │
-       │ Text Cleaning      │
-       │ Chapter Detection  │
-       │ Chunking           │
-       │ TTS                │
-       └──────────┬─────────┘
+       ┌─────────────────────┐
+       │ Background Worker   │
+       │                     │
+       │ PDF Processing      │
+       │ OCR                 │
+       │ Text Cleaning       │
+       │ Chapter Detection   │
+       │ Chunking            │
+       │ TTS                 │
+       └──────────┬──────────┘
                   │
-         ┌────────┴────────┐
-         ▼                 ▼
-     TTS Engine          AI Layer
-         │                 │
-    ┌────┼────┐       ┌────┴─────┐
-    │    │    │       │ Gemini   │
-   Edge OpenAI Eleven  │ RAG      │
-    │    │    │       │ Summary  │
-    └────┴────┘       └──────────┘
+          ┌───────┴────────┐
+          ▼                ▼
+      TTS Layer         AI Layer
+          │                │
+     ┌────┼────┐      ┌────┴─────┐
+     │    │    │      │ Gemini   │
+    Edge OpenAI Eleven│ RAG      │
+     │    │    │      │ Summary  │
+     └────┴────┘      └──────────┘
 ```
 
 ---
 
-# 15 — TECHNOLOGY STACK
+# Technology
 
 ## Frontend
 
-| Technology     | Purpose               |
-| -------------- | --------------------- |
-| Next.js 16     | Application framework |
-| React 19       | UI                    |
-| TypeScript     | Type safety           |
-| Tailwind CSS 4 | Styling               |
-| Lucide React   | Icons                 |
+| Technology | Role |
+|---|---|
+| Next.js 16 | Application framework |
+| React 19 | User interface |
+| TypeScript | Type safety |
+| Tailwind CSS 4 | Styling |
+| Lucide React | Interface icons |
 
 ## Backend
 
-| Technology | Purpose                  |
-| ---------- | ------------------------ |
-| Python     | Core backend language    |
-| FastAPI    | REST API                 |
-| SQLAlchemy | ORM                      |
-| PostgreSQL | Persistent database      |
-| PyMuPDF    | PDF extraction           |
-| EasyOCR    | OCR                      |
-| Edge-TTS   | Neural speech            |
-| OpenAI TTS | Optional speech provider |
-| ElevenLabs | Optional speech provider |
-| Mutagen    | Audio metadata           |
-| JWT        | Authentication           |
-| bcrypt     | Password hashing         |
+| Technology | Role |
+|---|---|
+| Python | Backend language |
+| FastAPI | REST API |
+| SQLAlchemy | ORM |
+| PostgreSQL | Database |
+| PyMuPDF | PDF processing |
+| EasyOCR | OCR |
+| Edge-TTS | Speech generation |
+| Mutagen | Audio metadata |
+| JWT | Authentication |
+| bcrypt | Password hashing |
 
 ## AI
 
-| Technology        | Purpose                    |
-| ----------------- | -------------------------- |
-| Google Gemini     | Book assistant + summaries |
-| Gemini Embeddings | Semantic retrieval         |
-| TF-IDF            | Local retrieval fallback   |
-| FAISS             | Vector-search capability   |
+| Technology | Role |
+|---|---|
+| Google Gemini | AI assistant |
+| Gemini Embeddings | Semantic retrieval |
+| TF-IDF | Local retrieval fallback |
+| FAISS | Vector search capability |
 
 ## Infrastructure
 
-| Technology     | Purpose                      |
-| -------------- | ---------------------------- |
-| Docker         | Containerization             |
-| Docker Compose | Multi-service orchestration  |
-| Redis          | Queue/infrastructure support |
-| PostgreSQL     | Job + application state      |
+| Technology | Role |
+|---|---|
+| Docker | Containerization |
+| Docker Compose | Service orchestration |
+| Redis | Queue / infrastructure |
+| PostgreSQL | Application state |
 
 ---
 
-# 16 — PROJECT FLOW
-
-From upload to audiobook:
-
-```text
-                ┌─────────────┐
-                │   PDF BOOK  │
-                └──────┬──────┘
-                       │
-                       ▼
-                FILE VALIDATION
-                       │
-                       ▼
-                METADATA EXTRACTION
-                       │
-                       ▼
-                ┌──────┴──────┐
-                │             │
-             DIGITAL        SCANNED
-                │             │
-                │            OCR
-                │             │
-                └──────┬──────┘
-                       ▼
-                  TEXT CLEANING
-                       │
-                       ▼
-                CHAPTER DETECTION
-                       │
-                       ▼
-                    CHUNKING
-                       │
-                       ▼
-                  AI SUMMARIES
-                       │
-                       ▼
-                   TTS QUEUE
-                       │
-                       ▼
-                 AUDIO CHUNKS
-                       │
-                       ▼
-                 AUDIOBOOK READY
-                       │
-             ┌─────────┴─────────┐
-             ▼                   ▼
-          LISTEN                READ
-             │                   │
-             └─────────┬─────────┘
-                       ▼
-                    ASK AI
-```
-
----
-
-# 17 — UI AT A GLANCE
-
-### Landing
-
-A minimal introduction focused on one action:
-
-> **Read with your eyes. Listen with your ears.**
-
-### Library
-
-Your uploaded books become a visual audiobook collection.
-
-### Upload
-
-A dedicated drag-and-drop PDF upload experience.
-
-### Reader
-
-A synchronized reading and listening environment.
-
-### Settings
-
-Control:
-
-* TTS provider
-* Language
-* Voice configuration
-* API configuration
-
----
-
-# 18 — RUN LOCALLY
+# Getting Started
 
 ## Prerequisites
 
-Recommended:
+Make sure you have:
 
 ```text
 Node.js 20+
@@ -809,7 +829,7 @@ Python 3.11+
 PostgreSQL 17+
 ```
 
-For Docker:
+For the Docker setup:
 
 ```text
 Docker
@@ -818,7 +838,9 @@ Docker Compose
 
 ---
 
-## Backend
+# Backend Setup
+
+Open a terminal:
 
 ```bash
 cd backend
@@ -830,10 +852,16 @@ Create a virtual environment:
 python -m venv .venv
 ```
 
-Activate it on Windows:
+### Windows
 
 ```powershell
 .venv\Scripts\activate
+```
+
+### macOS / Linux
+
+```bash
+source .venv/bin/activate
 ```
 
 Install dependencies:
@@ -842,7 +870,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Run the API:
+Start the API:
 
 ```bash
 python run.py
@@ -862,7 +890,7 @@ http://localhost:8000/docs
 
 ---
 
-# 19 — START THE WORKER
+# Start the Worker
 
 Open another terminal:
 
@@ -870,23 +898,25 @@ Open another terminal:
 cd backend
 ```
 
-Activate the environment:
+Activate the environment.
+
+Windows:
 
 ```powershell
 .venv\Scripts\activate
 ```
 
-Start the processing worker:
+Start the audio worker:
 
 ```bash
 python -m app.workers.audio_worker
 ```
 
-You should see the worker waiting for processing jobs.
+The worker will wait for processing jobs.
 
 ---
 
-# 20 — START THE FRONTEND
+# Frontend Setup
 
 Open another terminal:
 
@@ -900,7 +930,7 @@ Install dependencies:
 npm install
 ```
 
-Start development mode:
+Start the development server:
 
 ```bash
 npm run dev
@@ -914,15 +944,13 @@ http://localhost:3000
 
 ---
 
-# 21 — ENVIRONMENT CONFIGURATION
+# Environment Variables
 
-Copy the example configuration:
+Create your environment file from the example configuration.
 
 ```bash
 cp .env.example .env
 ```
-
-Then configure your own values.
 
 Example:
 
@@ -947,22 +975,31 @@ ELEVENLABS_API_KEY=""
 GEMINI_API_KEY=""
 ```
 
-**Never commit real API keys, passwords, JWT secrets, or production
-credentials to GitHub.**
+### Important
+
+Never commit:
+
+```text
+API keys
+Database passwords
+JWT secrets
+Production credentials
+Private tokens
+```
+
+to GitHub.
 
 ---
 
-# 22 — DOCKER
+# Docker
 
-READIFY also includes a multi-container Docker setup.
-
-Start everything with:
+READIFY can also be launched using Docker Compose.
 
 ```bash
 docker compose up --build
 ```
 
-The stack includes:
+The application can run as multiple services:
 
 ```text
 Frontend
@@ -976,20 +1013,20 @@ PostgreSQL
 Redis
 ```
 
-Services:
+Typical development endpoints:
 
 ```text
-Frontend  → localhost:3000
-Backend   → localhost:8000
-Postgres  → localhost:5432
+Frontend  → http://localhost:3000
+Backend   → http://localhost:8000
+PostgreSQL → localhost:5432
 Redis     → localhost:6379
 ```
 
 ---
 
-# 23 — API SURFACE
+# API
 
-The backend is organized around dedicated API modules.
+The backend is organized around dedicated API domains.
 
 ```text
 /api/auth
@@ -1001,14 +1038,19 @@ The backend is organized around dedicated API modules.
 /api/assistant
 ```
 
-This keeps the application separated into focused domains rather than
-putting the entire backend into a single route file.
+Interactive API documentation is available at:
+
+```text
+http://localhost:8000/docs
+```
+
+when the backend is running.
 
 ---
 
-# 24 — TESTING
+# Testing
 
-Backend service tests are included.
+Backend tests are included.
 
 Run:
 
@@ -1018,193 +1060,157 @@ cd backend
 
 Then:
 
+### Windows PowerShell
+
 ```powershell
 $env:PYTHONPATH="."
 pytest tests/
 ```
 
----
+### macOS / Linux
 
-# 25 — PRIVACY BY DESIGN
-
-READIFY is designed around processing the user's uploaded books as part
-of their reading experience.
-
-The architecture supports local processing for important components:
-
-```text
-PDF Extraction  → Local
-OCR             → Local
-Text Cleaning   → Local
-Database        → PostgreSQL
-Audio           → Configurable
-AI              → Optional Gemini
-```
-
-When external AI/TTS providers are enabled, the relevant content may be
-sent to those providers according to their respective APIs and policies.
-
----
-
-# 26 — WHAT READIFY IS
-
-READIFY is:
-
-```text
-✓ PDF reader
-✓ Audiobook generator
-✓ OCR pipeline
-✓ Chapter organizer
-✓ Synchronized reader
-✓ AI reading assistant
-✓ Book summarizer
-✓ Personal library
-✓ Listening progress tracker
+```bash
+PYTHONPATH=. pytest tests/
 ```
 
 ---
 
-# 27 — WHAT READIFY IS NOT
+# Design Philosophy
 
-READIFY is not intended to replace:
-
-```text
-✗ Professional audiobook narration
-✗ Human editorial review
-✗ A complete OCR correction system
-✗ A full cybersecurity-grade document platform
-```
-
-Generated audio and AI responses can vary depending on the source PDF,
-TTS provider, OCR quality, and AI configuration.
-
----
-
-# 28 — THE ROADMAP
-
-READIFY has room to become much more than a PDF-to-audio converter.
-
-### Near Future
-
-* [ ] Better audiobook metadata
-* [ ] Improved chapter editing
-* [ ] More voice controls
-* [ ] Better progress analytics
-* [ ] Bookmark improvements
-* [ ] Search improvements
-
-### Intelligence
-
-* [ ] Semantic book search
-* [ ] Cross-chapter questions
-* [ ] Better citation grounding
-* [ ] Personalized chapter summaries
-* [ ] Reading insights
-
-### Audio
-
-* [ ] More TTS providers
-* [ ] Voice previews
-* [ ] Per-chapter voice selection
-* [ ] Advanced equalizer
-* [ ] Better audio normalization
-
-### Platform
-
-* [ ] Cloud storage
-* [ ] Multi-device synchronization
-* [ ] Mobile application
-* [ ] Offline audiobook downloads
-* [ ] Public/private libraries
-
----
-
-# 29 — DESIGN PHILOSOPHY
-
-READIFY follows a simple visual principle:
+READIFY follows one simple principle:
 
 > **The interface should disappear behind the content.**
 
-That is why the experience uses:
+The visual language focuses on:
 
 ```text
 Dark surfaces
-+
+       +
 Soft contrast
-+
+       +
 Minimal navigation
-+
+       +
 Large typography
-+
+       +
 Subtle borders
-+
+       +
 Focused controls
 ```
 
-The goal is not to make the application look complicated.
+The goal isn't to make the application look complicated.
 
 The goal is to make reading feel effortless.
 
 ---
 
-# 30 — THE BIGGER VISION
+# What Makes It Different?
 
-Imagine taking a 500-page book and turning it into:
+READIFY combines several experiences into one platform:
 
 ```text
-             YOUR BOOK
-                 │
-                 ▼
-        ┌────────────────┐
-        │     READIFY    │
-        └───────┬────────┘
-                │
-       ┌────────┼────────┐
-       ▼        ▼        ▼
-     AUDIO     TEXT      AI
-       │        │        │
-       ▼        ▼        ▼
-    LISTEN     READ     ASK
-       │        │        │
-       └────────┼────────┘
-                ▼
-          UNDERSTAND MORE
+                  ┌─────────────┐
+                  │     BOOK    │
+                  └──────┬──────┘
+                         │
+            ┌────────────┼────────────┐
+            ▼            ▼            ▼
+          READER       AUDIO           AI
+            │            │             │
+            ▼            ▼             ▼
+          READ         LISTEN         ASK
+            │            │             │
+            └────────────┼─────────────┘
+                         ▼
+                  UNDERSTAND MORE
 ```
 
-Not just **reading**.
+It's not just a:
 
-Not just **listening**.
+**PDF reader**
 
-But a different way to **experience a book**.
+and not just an:
+
+**audiobook generator.**
+
+It's a bridge between the two.
 
 ---
 
-# 31 — PROJECT STATUS
+# Roadmap
 
-```text
-╭────────────────────────────────────────────╮
-│                                            │
-│              READIFY STATUS                │
-│                                            │
-│   PDF Processing              ██████████   │
-│   OCR                         ██████████   │
-│   Chapter Detection           ██████████   │
-│   Text Cleaning               ██████████   │
-│   TTS                         ██████████   │
-│   Audiobook Player            ██████████   │
-│   Synced Reader               ██████████   │
-│   AI Assistant                ██████████   │
-│   Library                     ██████████   │
-│   Docker Deployment           ██████████   │
-│                                            │
-╰────────────────────────────────────────────╯
-```
+## Reading
+
+- [ ] Improved text highlighting
+- [ ] Better chapter navigation
+- [ ] Advanced bookmarks
+- [ ] Reading statistics
+- [ ] Better search
+
+## Audio
+
+- [ ] More TTS providers
+- [ ] Voice previews
+- [ ] Per-chapter voice selection
+- [ ] Advanced equalizer
+- [ ] Better audio normalization
+
+## AI
+
+- [ ] Cross-chapter questions
+- [ ] Better semantic search
+- [ ] Personalized summaries
+- [ ] AI-generated study notes
+- [ ] Stronger source grounding
+
+## Platform
+
+- [ ] Cloud storage
+- [ ] Multi-device synchronization
+- [ ] Mobile application
+- [ ] Offline audiobook downloads
+- [ ] Public / private libraries
 
 ---
 
-# 32 — CONTRIBUTING
+# Privacy
 
-Contributions are welcome.
+READIFY can process important parts of the workflow locally.
+
+```text
+PDF Extraction     → Local
+OCR                → Local
+Text Cleaning      → Local
+Database           → PostgreSQL
+Audio              → Configurable
+AI                 → Optional
+```
+
+When external AI or TTS providers are enabled, relevant content may be sent to those providers according to their APIs and privacy policies.
+
+---
+
+# Project Status
+
+```text
+PDF Processing          ████████████████████
+OCR                     ████████████████████
+Text Cleaning           ████████████████████
+Chapter Detection       ████████████████████
+TTS                     ████████████████████
+Audiobook Player        ████████████████████
+Library                 ████████████████████
+Progress Tracking       ████████████████████
+AI Assistant            ████████████████████
+Docker                  ████████████████████
+```
+
+READIFY is an actively evolving project.
+
+---
+
+# Contributing
+
+Contributions, ideas and improvements are welcome.
 
 Fork the repository:
 
@@ -1212,7 +1218,7 @@ Fork the repository:
 git clone <your-fork-url>
 ```
 
-Create a branch:
+Create a feature branch:
 
 ```bash
 git checkout -b feature/your-feature
@@ -1225,7 +1231,7 @@ git add .
 git commit -m "Add your feature"
 ```
 
-Push:
+Push the branch:
 
 ```bash
 git push origin feature/your-feature
@@ -1235,7 +1241,7 @@ Then open a Pull Request.
 
 ---
 
-# 33 — LICENSE
+# License
 
 This project is licensed under the **MIT License**.
 
@@ -1246,35 +1252,36 @@ This project is licensed under the **MIT License**.
 # READIFY
 
 ### **Read with Your Eyes.**
-
 ### **Listen with Your Ears.**
 
 <br>
 
 ```text
 BOOK
- ↓
+  ↓
 TEXT
- ↓
+  ↓
 VOICE
- ↓
+  ↓
 UNDERSTANDING
 ```
 
 <br>
 
-**Built with Next.js, React, TypeScript, Python, FastAPI and AI.**
+Built with **Next.js · React · TypeScript · Python · FastAPI · PostgreSQL · AI**
 
 <br>
 
-### Made by Blesson Raj K J
+### Created by Blesson Raj K J
 
 <br>
 
-[GitHub](https://github.com/blessonrajkj)
+<a href="https://github.com/blessonrajkj">
+  <img src="https://img.shields.io/badge/GitHub-Blesson%20Raj%20K%20J-black?style=for-the-badge&logo=github" alt="GitHub">
+</a>
 
-<br>
+<br><br>
 
-**If READIFY helps you experience books differently, give the repository a ⭐**
+**If READIFY changes the way you experience books, consider giving the repository a ⭐**
 
 </div>

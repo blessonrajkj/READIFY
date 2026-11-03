@@ -1,5 +1,5 @@
 import os
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 
 class Settings(BaseSettings):
@@ -38,13 +38,14 @@ class Settings(BaseSettings):
     ELEVENLABS_API_KEY: Optional[str] = None
     
     # AI / RAG Settings
-    # We will prioritize Gemini because the Google AI SDK is installed on this system
     GEMINI_API_KEY: Optional[str] = None
-    
-    class Config:
-        case_sensitive = True
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+
+    model_config = SettingsConfigDict(
+        case_sensitive=True,
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
 
 settings = Settings()
 

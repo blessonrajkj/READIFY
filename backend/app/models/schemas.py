@@ -169,3 +169,178 @@ class JobResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+# Bookmark Schemas
+class BookmarkCreate(BaseModel):
+    chapter_id: str
+    chunk_id: Optional[str] = None
+    chunk_index: int = 0
+    page_number: Optional[int] = None
+    text_snippet: Optional[str] = None
+    note: Optional[str] = None
+
+class BookmarkResponse(BaseModel):
+    id: str
+    book_id: str
+    chapter_id: str
+    chunk_id: Optional[str] = None
+    chunk_index: int = 0
+    page_number: Optional[int] = None
+    text_snippet: Optional[str] = None
+    note: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Study Note Schemas
+class StudyNoteCreate(BaseModel):
+    chapter_id: Optional[str] = None
+    title: str
+    content: str
+    tags: Optional[List[str]] = []
+    color: Optional[str] = "default"
+
+class StudyNoteUpdate(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+    tags: Optional[List[str]] = None
+    color: Optional[str] = None
+    is_pinned: Optional[bool] = None
+
+class StudyNoteResponse(BaseModel):
+    id: str
+    book_id: str
+    chapter_id: Optional[str] = None
+    title: str
+    content: str
+    tags: Optional[List[str]] = []
+    color: Optional[str] = "default"
+    is_pinned: bool = False
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Flashcard Schemas
+class FlashcardCreate(BaseModel):
+    chapter_id: Optional[str] = None
+    front: str
+    back: str
+    category: Optional[str] = "Concept"
+    difficulty: Optional[str] = "medium"
+    source_page: Optional[int] = None
+
+class FlashcardUpdate(BaseModel):
+    front: Optional[str] = None
+    back: Optional[str] = None
+    category: Optional[str] = None
+    difficulty: Optional[str] = None
+    is_mastered: Optional[bool] = None
+
+class FlashcardResponse(BaseModel):
+    id: str
+    book_id: str
+    chapter_id: Optional[str] = None
+    front: str
+    back: str
+    category: str
+    difficulty: str
+    source_page: Optional[int] = None
+    is_mastered: bool
+    review_count: int
+    last_reviewed_at: Optional[datetime] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Quiz Schemas
+class QuizQuestionResponse(BaseModel):
+    id: str
+    question: str
+    options: List[str]
+    correct_option_index: int
+    explanation: str
+    source_reference: Optional[str] = None
+    difficulty: str
+    order_index: int
+
+    class Config:
+        from_attributes = True
+
+class QuizResponse(BaseModel):
+    id: str
+    book_id: str
+    chapter_id: Optional[str] = None
+    title: str
+    description: Optional[str] = None
+    difficulty: str
+    time_limit_seconds: int
+    total_questions: int
+    created_at: datetime
+    questions: List[QuizQuestionResponse] = []
+
+    class Config:
+        from_attributes = True
+
+class QuizCreateRequest(BaseModel):
+    chapter_id: Optional[str] = None
+    difficulty: Optional[str] = "medium"
+    question_count: Optional[int] = 5
+
+class QuizSubmission(BaseModel):
+    answers: Dict[str, int] # question_id -> selected_option_index
+    duration_seconds: int = 0
+
+class QuizAttemptResponse(BaseModel):
+    id: str
+    quiz_id: str
+    book_id: str
+    score: int
+    total_questions: int
+    percentage: float
+    answers: Dict[str, int]
+    weak_topics: Optional[List[str]] = []
+    duration_seconds: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Reading Progress Schemas
+class ReadingProgressUpdate(BaseModel):
+    current_chapter_id: Optional[str] = None
+    current_page: int = 1
+    reading_seconds_delta: int = 0 # seconds elapsed in this reading session
+
+class ReadingProgressResponse(BaseModel):
+    id: str
+    book_id: str
+    current_chapter_id: Optional[str] = None
+    current_page: int
+    reading_seconds: int
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Learning Analytics Schemas
+class RecordLearningHeartbeat(BaseModel):
+    book_id: str
+    activity_type: str # "reading" or "listening"
+    seconds_delta: int = 15
+
+class LearningAnalyticsResponse(BaseModel):
+    total_listening_seconds: int = 0
+    total_reading_seconds: int = 0
+    total_study_minutes: int = 0
+    chapters_completed: int = 0
+    quizzes_taken: int = 0
+    avg_quiz_score: float = 0.0
+    flashcards_reviewed: int = 0
+    flashcards_mastered: int = 0
+    learning_streak_days: int = 1
+    weak_topics: List[str] = []
+    retention_score: int = 0

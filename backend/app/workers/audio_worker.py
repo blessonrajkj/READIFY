@@ -278,7 +278,12 @@ async def worker_loop():
                             logger.info(f"Background synthesized audio chunk {ac.id} for book {text_chunk.book_id}")
                         except Exception as e:
                             logger.error(f"Background synthesis failed for chunk {ac.id}: {e}")
-                            ac.status = "pending" # Reset so it retries later
+                            ac.try_count = (ac.try_count or 0) + 1
+                            if ac.try_count >= 3:
+                                ac.status = "failed"
+                                logger.warning(f"Audio chunk {ac.id} exceeded max retries. Marked as failed.")
+                            else:
+                                ac.status = "pending" # Reset so it retries later
                             db.commit()
                     else:
                         # Bad database entry

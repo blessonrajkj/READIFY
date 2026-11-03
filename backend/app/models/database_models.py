@@ -39,6 +39,12 @@ class Book(Base):
     listening_progress = relationship("ListeningProgress", back_populates="book", cascade="all, delete-orphan")
     conversations = relationship("AIConversation", back_populates="book", cascade="all, delete-orphan")
     jobs = relationship("Job", back_populates="book", cascade="all, delete-orphan")
+    bookmarks = relationship("Bookmark", back_populates="book", cascade="all, delete-orphan")
+    study_notes = relationship("StudyNote", back_populates="book", cascade="all, delete-orphan")
+    flashcards = relationship("Flashcard", back_populates="book", cascade="all, delete-orphan")
+    quizzes = relationship("Quiz", back_populates="book", cascade="all, delete-orphan")
+    quiz_attempts = relationship("QuizAttempt", back_populates="book", cascade="all, delete-orphan")
+    reading_progress = relationship("ReadingProgress", back_populates="book", cascade="all, delete-orphan")
 
 class Chapter(Base):
     __tablename__ = "chapters"
@@ -61,6 +67,10 @@ class Chapter(Base):
     text_chunks = relationship("TextChunk", back_populates="chapter", cascade="all, delete-orphan")
     audio_chunks = relationship("AudioChunk", back_populates="chapter", cascade="all, delete-orphan")
     progress_records = relationship("ListeningProgress", back_populates="current_chapter")
+    flashcards = relationship("Flashcard", back_populates="chapter", cascade="all, delete-orphan")
+    quizzes = relationship("Quiz", back_populates="chapter", cascade="all, delete-orphan")
+    study_notes = relationship("StudyNote", back_populates="chapter", cascade="all, delete-orphan")
+    bookmarks = relationship("Bookmark", back_populates="chapter", cascade="all, delete-orphan")
 
 class TextChunk(Base):
     __tablename__ = "text_chunks"
@@ -149,3 +159,144 @@ class Job(Base):
     
     # Relationships
     book = relationship("Book", back_populates="jobs")
+
+class Bookmark(Base):
+    __tablename__ = "bookmarks"
+    
+    id = Column(String, primary_key=True, default=generate_uuid, index=True)
+    book_id = Column(String, ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True)
+    chapter_id = Column(String, ForeignKey("chapters.id", ondelete="CASCADE"), nullable=False, index=True)
+    chunk_id = Column(String, ForeignKey("text_chunks.id", ondelete="SET NULL"), nullable=True)
+    chunk_index = Column(Integer, default=0)
+    page_number = Column(Integer, nullable=True)
+    text_snippet = Column(Text, nullable=True)
+    note = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    book = relationship("Book", back_populates="bookmarks")
+    chapter = relationship("Chapter", back_populates="bookmarks")
+
+class StudyNote(Base):
+    __tablename__ = "study_notes"
+    
+    id = Column(String, primary_key=True, default=generate_uuid, index=True)
+    book_id = Column(String, ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True)
+    chapter_id = Column(String, ForeignKey("chapters.id", ondelete="SET NULL"), nullable=True, index=True)
+    title = Column(String, nullable=False)
+    content = Column(Text, nullable=False)
+    tags = Column(JSON, nullable=True) # list of tags
+    color = Column(String, default="default")
+    is_pinned = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    book = relationship("Book", back_populates="study_notes")
+    chapter = relationship("Chapter", back_populates="study_notes")
+
+class Flashcard(Base):
+    __tablename__ = "flashcards"
+    
+    id = Column(String, primary_key=True, default=generate_uuid, index=True)
+    book_id = Column(String, ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True)
+    chapter_id = Column(String, ForeignKey("chapters.id", ondelete="SET NULL"), nullable=True, index=True)
+    front = Column(Text, nullable=False)
+    back = Column(Text, nullable=False)
+    category = Column(String, default="Concept") # Concept, Terminology, Formula, Question
+    difficulty = Column(String, default="medium") # easy, medium, hard
+    source_page = Column(Integer, nullable=True)
+    is_mastered = Column(Boolean, default=False)
+    review_count = Column(Integer, default=0)
+    last_reviewed_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    book = relationship("Book", back_populates="flashcards")
+    chapter = relationship("Chapter", back_populates="flashcards")
+
+class Quiz(Base):
+    __tablename__ = "quizzes"
+    
+    id = Column(String, primary_key=True, default=generate_uuid, index=True)
+    book_id = Column(String, ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True)
+    chapter_id = Column(String, ForeignKey("chapters.id", ondelete="SET NULL"), nullable=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(Text, nullable=True)
+    difficulty = Column(String, default="medium") # easy, medium, hard
+    time_limit_seconds = Column(Integer, default=300)
+    total_questions = Column(Integer, default=5)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    book = relationship("Book", back_populates="quizzes")
+    chapter = relationship("Chapter", back_populates="quizzes")
+    questions = relationship("QuizQuestion", back_populates="quiz", cascade="all, delete-orphan", order_by="QuizQuestion.order_index")
+    attempts = relationship("QuizAttempt", back_populates="quiz", cascade="all, delete-orphan", order_by="QuizAttempt.created_at.desc()")
+
+class QuizQuestion(Base):
+    __tablename__ = "quiz_questions"
+    
+    id = Column(String, primary_key=True, default=generate_uuid, index=True)
+    quiz_id = Column(String, ForeignKey("quizzes.id", ondelete="CASCADE"), nullable=False, index=True)
+    question = Column(Text, nullable=False)
+    options = Column(JSON, nullable=False) # list of 4 string options
+    correct_option_index = Column(Integer, nullable=False) # 0 to 3
+    explanation = Column(Text, nullable=False)
+    source_reference = Column(String, nullable=True) # e.g. "Page 12, Chapter 1"
+    difficulty = Column(String, default="medium")
+    order_index = Column(Integer, default=0)
+    
+    # Relationships
+    quiz = relationship("Quiz", back_populates="questions")
+
+class QuizAttempt(Base):
+    __tablename__ = "quiz_attempts"
+    
+    id = Column(String, primary_key=True, default=generate_uuid, index=True)
+    quiz_id = Column(String, ForeignKey("quizzes.id", ondelete="CASCADE"), nullable=False, index=True)
+    book_id = Column(String, ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    score = Column(Integer, nullable=False)
+    total_questions = Column(Integer, nullable=False)
+    percentage = Column(Float, nullable=False)
+    answers = Column(JSON, nullable=False) # { question_id: selected_index }
+    weak_topics = Column(JSON, nullable=True) # list of strings/concepts
+    duration_seconds = Column(Integer, default=0)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    quiz = relationship("Quiz", back_populates="attempts")
+    book = relationship("Book", back_populates="quiz_attempts")
+
+class ReadingProgress(Base):
+    __tablename__ = "reading_progress"
+    
+    id = Column(String, primary_key=True, default=generate_uuid, index=True)
+    book_id = Column(String, ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    current_chapter_id = Column(String, ForeignKey("chapters.id", ondelete="SET NULL"), nullable=True)
+    current_page = Column(Integer, default=1)
+    reading_seconds = Column(Integer, default=0)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    book = relationship("Book", back_populates="reading_progress")
+
+class LearningAnalytics(Base):
+    __tablename__ = "learning_analytics"
+    
+    id = Column(String, primary_key=True, default=generate_uuid, index=True)
+    book_id = Column(String, ForeignKey("books.id", ondelete="CASCADE"), nullable=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True, index=True)
+    total_listening_seconds = Column(Integer, default=0)
+    total_reading_seconds = Column(Integer, default=0)
+    chapters_completed = Column(Integer, default=0)
+    quizzes_taken = Column(Integer, default=0)
+    avg_quiz_score = Column(Float, default=0.0)
+    flashcards_reviewed = Column(Integer, default=0)
+    flashcards_mastered = Column(Integer, default=0)
+    learning_streak_days = Column(Integer, default=1)
+    weak_topics = Column(JSON, nullable=True) # list of weak concepts
+    last_active_date = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

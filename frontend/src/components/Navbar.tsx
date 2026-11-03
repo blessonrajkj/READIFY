@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sun, Moon, Laptop, BookOpen, Upload, Library, Volume2 } from "lucide-react";
+import { Sun, Moon, Laptop, BookOpen, Upload, Library, Volume2, BarChart2 } from "lucide-react";
 import { useTheme } from "./ThemeContext";
 import Logo from "./Logo";
 
@@ -14,6 +14,7 @@ export default function Navbar() {
 
   const navItems = [
     { href: "/library", label: "Library", icon: Library },
+    { href: "/analytics", label: "Analytics", icon: BarChart2 },
     { href: "/upload", label: "Upload", icon: Upload },
   ];
 

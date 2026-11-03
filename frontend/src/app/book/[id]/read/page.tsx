@@ -80,26 +80,41 @@ export default function ReadPage({ params }: PageProps) {
 
   useEffect(() => {
     loadBookAndChapters();
+
+    // Pulse learning heartbeat every 30s while active
+    const heartbeatTimer = setInterval(() => {
+      fetch("/api/analytics/heartbeat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          book_id: bookId,
+          activity_type: "reading",
+          seconds_delta: 30
+        })
+      }).catch(() => {});
+    }, 30000);
+
+    return () => clearInterval(heartbeatTimer);
   }, [bookId]);
 
   const loadBookAndChapters = async () => {
     setIsLoading(true);
     try {
       // 1. Fetch Book Details
-      const bookRes = await fetch(`http://localhost:8000/api/books/${bookId}`);
+      const bookRes = await fetch(`/api/books/${bookId}`);
       if (!bookRes.ok) throw new Error("Failed to load book");
       const bookData = await bookRes.json();
       setBook(bookData);
 
       // 2. Fetch Chapters
-      const chRes = await fetch(`http://localhost:8000/api/books/${bookId}/chapters/`);
+      const chRes = await fetch(`/api/books/${bookId}/chapters/`);
       if (!chRes.ok) throw new Error("Failed to load chapters");
       const chData: Chapter[] = await chRes.json();
       setChapters(chData);
 
       if (chData.length > 0) {
         // 3. Fetch Listening Progress
-        const progRes = await fetch(`http://localhost:8000/api/books/${bookId}/progress/`);
+        const progRes = await fetch(`/api/books/${bookId}/progress/`);
         if (progRes.ok) {
           const progData = await progRes.json();
           
@@ -136,7 +151,7 @@ export default function ReadPage({ params }: PageProps) {
   const fetchChapterChunks = async (chId: string) => {
     setIsChunksLoading(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/books/${bookId}/audio/chapters/${chId}/chunks`);
+      const res = await fetch(`/api/books/${bookId}/audio/chapters/${chId}/chunks`);
       if (res.ok) {
         const data = await res.json();
         setChunks(data);
@@ -155,7 +170,7 @@ export default function ReadPage({ params }: PageProps) {
     if (!activeCh) return;
     
     try {
-      await fetch(`http://localhost:8000/api/books/${bookId}/progress/`, {
+      await fetch(`/api/books/${bookId}/progress/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -210,7 +225,7 @@ export default function ReadPage({ params }: PageProps) {
     
     setIsSearching(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/books/${bookId}/search?q=${encodeURIComponent(searchQuery)}`);
+      const res = await fetch(`/api/books/${bookId}/search?q=${encodeURIComponent(searchQuery)}`);
       if (res.ok) {
         const data = await res.json();
         setSearchResults(data.results);

@@ -9,7 +9,39 @@ logger = logging.getLogger(__name__)
 class PDFService:
     @staticmethod
     def extract_text_and_metadata(filepath: str) -> Dict[str, Any]:
-        """Extracts text page-by-page, metadata, and checks if OCR is needed."""
+        """Extracts text page-by-page, metadata, and checks if OCR is needed. Supports PDF and TXT."""
+        ext = os.path.splitext(filepath)[1].lower()
+        
+        # Support for plain text files
+        if ext == ".txt":
+            try:
+                with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+                    full_text = f.read()
+                
+                # Split into pseudo-pages (~2500 chars per page, roughly 400 words)
+                page_size = 2500
+                pages_text = []
+                for i in range(0, len(full_text), page_size):
+                    chunk = full_text[i:i+page_size]
+                    if chunk.strip():
+                        pages_text.append(chunk)
+                
+                if not pages_text:
+                    pages_text = [""]
+                    
+                filename_base = os.path.splitext(os.path.basename(filepath))[0]
+                return {
+                    "title": filename_base.replace("_", " ").title(),
+                    "author": "Document Author",
+                    "total_pages": len(pages_text),
+                    "needs_ocr": False,
+                    "pages": pages_text
+                }
+            except Exception as e:
+                logger.error(f"Error reading TXT '{filepath}': {e}")
+                raise RuntimeError(f"Failed to read TXT file: {e}")
+
+        # PDF processing
         try:
             doc = fitz.open(filepath)
             total_pages = len(doc)

@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 # File validation rules
 MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB
-ALLOWED_EXTENSIONS = {".pdf"}
+ALLOWED_EXTENSIONS = {".pdf", ".txt"}
 
 def validate_file(file: UploadFile):
     # Extension check
@@ -27,14 +27,7 @@ def validate_file(file: UploadFile):
     if ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unsupported file type. Only PDF files are allowed."
-        )
-    
-    # Check mime type (basic check, could be spoofed, so we also rely on extension and content parsing)
-    if file.content_type != "application/pdf" and not file.filename.endswith(".pdf"):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="File content type must be PDF."
+            detail=f"Unsupported file type. Allowed formats: PDF, TXT."
         )
 
 @router.post("/upload", response_model=BookResponse, status_code=status.HTTP_201_CREATED)

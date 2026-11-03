@@ -38,7 +38,7 @@ if os.path.exists(settings.COVER_DIR):
     app.mount("/covers", StaticFiles(directory=settings.COVER_DIR), name="covers")
 
 # Import routers
-from app.api.routes import auth, books, chapters, audio, search, assistant, progress
+from app.api.routes import auth, books, chapters, audio, search, assistant, progress, learning, analytics
 
 # Register routers
 app.include_router(auth.router, prefix=settings.API_V1_STR)
@@ -48,6 +48,8 @@ app.include_router(audio.router, prefix=settings.API_V1_STR)
 app.include_router(search.router, prefix=settings.API_V1_STR)
 app.include_router(assistant.router, prefix=settings.API_V1_STR)
 app.include_router(progress.router, prefix=settings.API_V1_STR)
+app.include_router(learning.router, prefix=settings.API_V1_STR)
+app.include_router(analytics.router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 def read_root():

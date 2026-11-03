@@ -28,12 +28,12 @@ interface ChapterSummary {
 
 interface AiAssistantProps {
   bookId: string;
-  chapterId: string;
-  chapterTitle: string;
+  chapterId?: string;
+  chapterTitle?: string;
 }
 
 export default function AiAssistant({ bookId, chapterId, chapterTitle }: AiAssistantProps) {
-  const [activeTab, setActiveTab] = useState<"summary" | "chat">("summary");
+  const [activeTab, setActiveTab] = useState<"summary" | "chat">(chapterId ? "summary" : "chat");
   
   // Chat States
   const [messages, setMessages] = useState<Message[]>([]);
@@ -50,7 +50,7 @@ export default function AiAssistant({ bookId, chapterId, chapterTitle }: AiAssis
 
   // Fetch chapter summary when chapter changes
   useEffect(() => {
-    if (activeTab === "summary") {
+    if (activeTab === "summary" && chapterId) {
       fetchSummary();
     }
   }, [chapterId, activeTab]);
@@ -61,9 +61,10 @@ export default function AiAssistant({ bookId, chapterId, chapterTitle }: AiAssis
   }, [messages]);
 
   const fetchSummary = async () => {
+    if (!chapterId) return;
     setIsSummaryLoading(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/books/${bookId}/assistant/chapters/${chapterId}/summary`);
+      const res = await fetch(`/api/books/${bookId}/assistant/chapters/${chapterId}/summary`);
       if (res.ok) {
         const data = await res.json();
         setSummaryData(data);
@@ -85,7 +86,7 @@ export default function AiAssistant({ bookId, chapterId, chapterTitle }: AiAssis
     setIsChatLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:8000/api/books/${bookId}/assistant/chat`, {
+      const res = await fetch(`/api/books/${bookId}/assistant/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

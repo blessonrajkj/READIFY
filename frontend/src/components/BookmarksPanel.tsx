@@ -46,16 +46,49 @@ export default function BookmarksPanel({
 
   // Load bookmarks on mount or when bookId changes
   useEffect(() => {
-    const saved = localStorage.getItem(localStorageKey);
-    if (saved) {
-      try {
-        setBookmarks(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse bookmarks", e);
-      }
-    } else {
-      setBookmarks([]);
-    }
+    // 1. Try loading from database first
+    fetch(`/api/books/${bookId}/learning/bookmarks`)
+      .then(res => res.ok ? res.json() : [])
+      .then(serverBookmarks => {
+        if (serverBookmarks && serverBookmarks.length > 0) {
+          const mapped: Bookmark[] = serverBookmarks.map((b: any) => ({
+            id: b.id,
+            chapterId: b.chapter_id,
+            chapterTitle: `Chapter ${b.chapter_id.substring(0, 6)}`,
+            chunkIndex: b.chunk_index || 0,
+            textSnippet: b.text_snippet || "",
+            noteText: b.note || "",
+            createdAt: new Date(b.created_at).toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit"
+            })
+          }));
+          setBookmarks(mapped);
+          localStorage.setItem(localStorageKey, JSON.stringify(mapped));
+        } else {
+          // Fallback to localStorage
+          const saved = localStorage.getItem(localStorageKey);
+          if (saved) {
+            try {
+              setBookmarks(JSON.parse(saved));
+            } catch (e) {
+              setBookmarks([]);
+            }
+          }
+        }
+      })
+      .catch(() => {
+        const saved = localStorage.getItem(localStorageKey);
+        if (saved) {
+          try {
+            setBookmarks(JSON.parse(saved));
+          } catch (e) {
+            setBookmarks([]);
+          }
+        }
+      });
   }, [bookId, localStorageKey]);
 
   const saveBookmarksList = (list: Bookmark[]) => {
@@ -69,6 +102,20 @@ export default function BookmarksPanel({
 
     const currentChunk = chunks[activeChunkIndex] || chunks[0];
     const snippet = currentChunk.text.substring(0, 120) + (currentChunk.text.length > 120 ? "..." : "");
+
+    // Persist to server
+    fetch(`/api/books/${bookId}/learning/bookmarks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chapter_id: activeChapterId,
+        chunk_id: currentChunk.chunk_id,
+        chunk_index: activeChunkIndex,
+        page_number: currentChunk.page_number,
+        text_snippet: snippet,
+        note: newNote.trim()
+      })
+    }).catch(() => {});
 
     const newBookmark: Bookmark = {
       id: Math.random().toString(36).substring(2, 9),
@@ -90,6 +137,9 @@ export default function BookmarksPanel({
   };
 
   const handleDeleteBookmark = (id: string) => {
+    fetch(`/api/books/${bookId}/learning/bookmarks/${id}`, {
+      method: "DELETE"
+    }).catch(() => {});
     saveBookmarksList(bookmarks.filter((b) => b.id !== id));
   };
 
